@@ -3,28 +3,77 @@ const URL_Party = 'https://localhost:7026/api/Party';
 const URL_Product = 'https://localhost:7026/api/Product';
 
 const tableBody = document.querySelector('#Table-body');
-const addAssignPatryBtn = document.querySelector('#addAssignParty');
+const ddParty = document.querySelector('#ddParty');
+const ddProduct = document.querySelector('#ddProduct');
+const model = document.querySelector('.modal');
+const btnCancle = document.querySelector('.btnCancle');
+const btnAddNewAssignParty = document.querySelector('#addAssignParty');
+const btnInModelAdd = document.querySelector('#btnAssignParty');
 
-addAssignPatryBtn.addEventListener('click', onAddAssignParty);
+let selectedParty, selectedProduct;
+
+btnAddNewAssignParty.addEventListener('click', openModel);
+
+btnInModelAdd.addEventListener('click', onAddAssignParty);
+
+btnCancle.addEventListener('click', function () {
+    model.classList.add('hide');
+})
+
+ddParty.addEventListener('change', function (e) {
+    selectedParty = e.target.value;
+});
+
+ddProduct.addEventListener('change', function (e) {
+    selectedProduct = e.target.value;
+});
 
 //adding Party
-async function onAddAssignParty() {
-    const dataParty = await fetch(URL_Party).then(res => res.json()).then(data => console.log(data));
-    console.log(dataParty);
-    const dataProduct = await fetch(URL_Product).then(res => res.json()).then(data => console.log(data));
-    console.log(dataProduct);
+async function openModel() {
+    const dataParty = await fetch(URL_Party).then(res => res.json());
+    setDropdownParty(dataParty);
 
-    // const data = prompt('Enter AssignParty Name');
+    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    setDropdownProduct(dataProduct);
 
-    // if (data.length === 0) {
-    //     alert("Enter valid data please!!");
-    //     return;
-    // }
+}
 
-    // const objBody = {
-    //     name: data
-    // }
-    // addNewAssignParty(objBody)
+function onAddAssignParty() {
+    const objBody = {
+        partyId: selectedParty,
+        productId: selectedProduct
+    }
+    addNewAssignParty(objBody);
+}
+
+
+function setDropdownParty(data) {
+    let allOptions = '';
+
+    data.forEach(ele => {
+        const singleOption =
+            `
+        <option value="${ele.id}">${ele.name}</option>
+        `;
+
+        allOptions += singleOption;
+    });
+
+    ddParty.innerHTML = allOptions;
+}
+
+function setDropdownProduct(data) {
+    let allOptions = '';
+
+    data.forEach(ele => {
+        const singleOption =
+            `
+        <option value="${ele.id}">${ele.name}</option>
+        `;
+        allOptions += singleOption;
+    });
+
+    ddProduct.innerHTML = allOptions;
 }
 
 function addNewAssignParty(objBody) {
@@ -44,13 +93,13 @@ const getData = async function () {
     await fetch(URL)
         .then(res => res.json())
         .then(data => {
+            model.classList.add('hide');
             showTable(data);
         }
         );
 }
 
 const showTable = function (data) {
-    console.log(data);
     let allRows = '';
     data.forEach(ele => {
         const oneRow =
