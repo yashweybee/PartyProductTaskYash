@@ -1,14 +1,19 @@
 const URL = 'https://localhost:7026/api/AssignParty';
-
+const URL_Party = 'https://localhost:7026/api/Party';
+const URL_Product = 'https://localhost:7026/api/Product';
 
 const tableBody = document.querySelector('#Table-body');
 const addAssignPatryBtn = document.querySelector('#addAssignParty');
 
 addAssignPatryBtn.addEventListener('click', onAddAssignParty);
 
-
 //adding Party
-function onAddAssignParty() {
+async function onAddAssignParty() {
+    const dataParty = await fetch(URL_Party).then(res => res.json()).then(data => console.log(data));
+    console.log(dataParty);
+    const dataProduct = await fetch(URL_Product).then(res => res.json()).then(data => console.log(data));
+    console.log(dataProduct);
+
     // const data = prompt('Enter AssignParty Name');
 
     // if (data.length === 0) {
