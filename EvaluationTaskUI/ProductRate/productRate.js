@@ -1,30 +1,59 @@
 const URL = 'https://localhost:7026/api/ProductRate';
-
+const URL_Product = 'https://localhost:7026/api/Product'
 
 const tableBody = document.querySelector('#Table-body');
-const addPatryBtn = document.querySelector('#addProduct');
+const addProductBtn = document.querySelector('#addProduct');
 const editedRate = document.querySelector('#editedRate');
+const ddProductRate = document.querySelector('#ddProductRate');
+const btnAddModel = document.querySelector('#btnAddModel');
 
-addPatryBtn.addEventListener('click', onAddProductRate);
+let inpProductRate = document.querySelector('#inputProductRate');
 
+let selectedProduct;
 
-//adding ProductRate
+addProductBtn.addEventListener('click', openModel);
+
+btnAddModel.addEventListener('click', onAddProductRate);
+
+ddProductRate.addEventListener('change', function (e) {
+    selectedProduct = e.target.value;
+});
+
+//On open Modal
+async function openModel() {
+    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    setDropdownProduct(dataProduct);
+}
+
+function setDropdownProduct(data) {
+    let allOptions = '';
+
+    data.forEach(ele => {
+        const singleOption =
+            `
+        <option value="${ele.id}">${ele.name}</option>
+        `;
+        allOptions += singleOption;
+    });
+
+    ddProductRate.innerHTML = allOptions;
+}
+
+//add btn model
 function onAddProductRate() {
-    // const data = prompt('Enter ProductRate Name');
-
-    if (data.length === 0) {
-        alert("Enter valid data please!!");
-        return;
-    }
+    const productRate = inpProductRate.value;
+    const productId = selectedProduct;
 
     const objBody = {
-        name: data
+        productId: productId,
+        rate: productRate
     }
     addNewProductRate(objBody)
 }
 
-function addNewProductRate(objBody) {
-    fetch(URL, {
+async function addNewProductRate(objBody) {
+    // console.log("addNewProductRate");
+    await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
         headers: {
@@ -32,7 +61,7 @@ function addNewProductRate(objBody) {
         }
     })
         .then(res => res.json())
-        .then(data => getData(URL));
+        .then(data => getData());
 }
 
 //Get all Parties

@@ -38,6 +38,7 @@ async function openModel() {
 
 }
 
+// Called after clicking btn
 function onAddAssignParty() {
     const objBody = {
         partyId: selectedParty,
@@ -76,8 +77,9 @@ function setDropdownProduct(data) {
     ddProduct.innerHTML = allOptions;
 }
 
-function addNewAssignParty(objBody) {
-    fetch(URL, {
+// called after...
+async function addNewAssignParty(objBody) {
+    await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
         headers: {
@@ -86,6 +88,7 @@ function addNewAssignParty(objBody) {
     })
         .then(res => res.json())
         .then(data => getData());
+    $("#addAssignPartyModal").modal("hide");
 }
 
 //Get all Parties
@@ -93,7 +96,8 @@ const getData = async function () {
     await fetch(URL)
         .then(res => res.json())
         .then(data => {
-            model.classList.add('hide');
+            // model.classList.add('hide');
+
             showTable(data);
         }
         );

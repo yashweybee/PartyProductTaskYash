@@ -146,7 +146,7 @@ function editParty(id, objBody) {
 //started with this method
 getData(URL);
 
-$(document).ready(function () {
-    $('#tableParty').DataTable({
-    });
-});  
+// $(document).ready(function () {
+//     $('#tableParty').DataTable({
+//     });
+// });  
