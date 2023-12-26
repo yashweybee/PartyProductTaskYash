@@ -49,7 +49,7 @@ function onAddAssignParty() {
 
 
 function setDropdownParty(data) {
-    let allOptions = '';
+    let allOptions = ' <option value="">Select Party</option>';
 
     data.forEach(ele => {
         const singleOption =
@@ -64,7 +64,7 @@ function setDropdownParty(data) {
 }
 
 function setDropdownProduct(data) {
-    let allOptions = '';
+    let allOptions = '<option value="">Select Product</option>';
 
     data.forEach(ele => {
         const singleOption =
@@ -88,7 +88,6 @@ async function addNewAssignParty(objBody) {
     })
         .then(res => res.json())
         .then(data => getData());
-    $("#addAssignPartyModal").modal("hide");
 }
 
 //Get all Parties
@@ -104,13 +103,14 @@ const getData = async function () {
 }
 
 const showTable = function (data) {
+    console.log(data);
     let allRows = '';
     data.forEach(ele => {
         const oneRow =
             `
             <tr id = "${ele.id}">
-                <td>${ele.partyId}</td>
-                <td>${ele.productId}</td>
+                <td>${ele.partyName}</td>
+                <td>${ele.productName}</td>
                 <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>

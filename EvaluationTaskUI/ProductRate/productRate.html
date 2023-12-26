@@ -62,6 +62,7 @@
                 <!-- <th scope="col">#</th> -->
                 <th scope="col">Product</th>
                 <th scope="col">Product Rate</th>
+                <!-- <th scope="col">Date</th> -->
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
             </tr>
@@ -112,7 +113,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h2>Product Name</h2>
+                    <h2 id="lableProductRateModel"></h2>
 
                     <label for="exampleInputEmail1" class="form-label">Rate</label>
                     <input id="editedRate" type="email" class="form-control" id="exampleInputEmail1"
@@ -120,7 +121,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                    <button type="button" class="btn btn-primary">Edit</button>
+                    <button id="modelEditBtn" type="button" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>

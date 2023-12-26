@@ -6,14 +6,21 @@ const addProductBtn = document.querySelector('#addProduct');
 const editedRate = document.querySelector('#editedRate');
 const ddProductRate = document.querySelector('#ddProductRate');
 const btnAddModel = document.querySelector('#btnAddModel');
+const lableProductRateModel = document.querySelector('#lableProductRateModel');
+const modelEditBtn = document.querySelector('#modelEditBtn');
+const modelPeoductRateLable = document.querySelector('#ModelProductRateName');
 
 let inpProductRate = document.querySelector('#inputProductRate');
 
 let selectedProduct;
+let currentProduct, currentProductRate;
+let productRateData = [];
 
 addProductBtn.addEventListener('click', openModel);
 
 btnAddModel.addEventListener('click', onAddProductRate);
+
+modelEditBtn.addEventListener('click', onEditBtnClick)
 
 ddProductRate.addEventListener('change', function (e) {
     selectedProduct = e.target.value;
@@ -26,7 +33,7 @@ async function openModel() {
 }
 
 function setDropdownProduct(data) {
-    let allOptions = '';
+    let allOptions = ' <option value="">Select Product</option>';
 
     data.forEach(ele => {
         const singleOption =
@@ -48,11 +55,11 @@ function onAddProductRate() {
         productId: productId,
         rate: productRate
     }
+    // console.log(objBody);
     addNewProductRate(objBody)
 }
 
 async function addNewProductRate(objBody) {
-    // console.log("addNewProductRate");
     await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
@@ -64,26 +71,26 @@ async function addNewProductRate(objBody) {
         .then(data => getData());
 }
 
-//Get all Parties
+//Get all ProductRates Details
 const getData = async function () {
-    const data = await fetch(URL)
+    await fetch(URL)
         .then(res => res.json())
         .then(data => {
-            console.log(data);
+            productRateData = data;
             showTable(data);
-        }
-        );
+        });
 }
 
 const showTable = function (data) {
+    console.log(data);
     let allRows = '';
     data.forEach(ele => {
         const oneRow =
             `
             <tr id = "${ele.id}">
-                <td>${ele.productId}</td>
+                <td>${ele.productName}</td>
                 <td>${ele.rate}</td>
-                <td><button type="button" id ="${ele.id}" onclick="editBtn(this.id, this)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal2">Edit</button></td>
+                <td><button type="button" id ="${ele.id}" onclick="openEditModel(this)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal2">Edit</button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>
         `;
@@ -123,7 +130,7 @@ function deleteProductRate(id) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            getData(URL);
+            getData();
 
         })
         .catch(error => {
@@ -131,24 +138,29 @@ function deleteProductRate(id) {
         });
 }
 
-function editBtn(id, ele) {
-    // console.log(ele.parentNode.parentNode);
 
-    // const data = prompt('Edit ProductRate Name');
+async function openEditModel(ele) {
+    console.log(ele.id);
+    const data = await fetch(URL_Product + `/13`)
+        .then(res => res.json())
+    console.log(data);
 
-    // if (data.length === 0) {
-    //     alert("Enter valid data please!!");
-    //     return;
-    // }
+    // console.log(currentProduct);
+    // currentProductRate = inpProductRate;
+    // const preProductRate = productRateData.find(pr => pr.)
 
+    // lableProductRateModel.textContent = `${currentProduct.name}`
+    // editedRate.value = 
+}
+
+async function onEditBtnClick() {
     // const objBody = {
-    //     name: data
+    //     productId: currentProduct.id,
+    //     rate: currentProductRate
     // }
-    // editProductRate(id, objBody)
+    // editProductRate(id, objBody);
 }
 function editProductRate(id, objBody) {
-
-
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
@@ -160,7 +172,7 @@ function editProductRate(id, objBody) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            getData(URL);
+            getData();
 
         })
         .catch(error => {

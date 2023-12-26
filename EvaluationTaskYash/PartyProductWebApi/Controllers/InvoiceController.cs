@@ -23,9 +23,10 @@ namespace PartyProductWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<InvoiceDTO>>> Get()
         {
-            var invoice = await _context.Invoices.FromSqlRaw("EXECUTE dbo.GetAllInvoice").ToListAsync();
-            //var invoiceDTO = _mapper.Map<InvoiceDTO>(invoice);
-            return Ok(invoice);
+            var invoices = await _context.Invoices.Include(p => p.Party).Include(pr => pr.Product).ToListAsync();
+            var mappedInvoices = invoices.Select(i => _mapper.Map<InvoiceDTO>(i)).ToList();
+
+            return Ok(mappedInvoices);
         }
 
 

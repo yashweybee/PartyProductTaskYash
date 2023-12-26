@@ -23,18 +23,21 @@ namespace PartyProductWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AssignPartyDTO>>> Get()
         {
+            var assignParty = await _context.AssignParties.Include(p => p.Party).Include(pr => pr.Product).ToListAsync();
 
-            return Ok(await _context.AssignParties.ToListAsync());
+            var mappedAssignParty = assignParty.Select(ap => _mapper.Map<AssignPartyDTO>(ap)).ToList();
+
+
+            return Ok(mappedAssignParty);
         }
 
 
         [HttpGet("{Id}", Name = "GetAssignParty")]
         public async Task<ActionResult<AssignPartyDTO>> Get(int Id)
         {
-            var assignParty = await _context.AssignParties.FirstOrDefaultAsync(x => x.Id == Id);
+            var assignParty = await _context.AssignParties.Include(p => p.Party).Include(pr => pr.Product).FirstOrDefaultAsync(x => x.Id == Id);
             var assignPartyDTO = _mapper.Map<AssignPartyDTO>(assignParty);
             return assignPartyDTO;
-
         }
 
         [HttpPost]

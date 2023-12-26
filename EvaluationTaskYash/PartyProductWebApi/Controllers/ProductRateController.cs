@@ -22,7 +22,12 @@ namespace PartyProductWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductRateDTO>>> Get()
         {
-            return Ok(await _context.ProductRates.ToListAsync());
+
+            var productRate = await _context.ProductRates.Include(pr => pr.Product).ToListAsync();
+
+            var mappedProductRates = productRate.Select(pr => _mapper.Map<ProductRateDTO>(pr)).ToList();
+
+            return Ok(mappedProductRates);
         }
 
 

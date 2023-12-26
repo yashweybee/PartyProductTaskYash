@@ -28,7 +28,7 @@ public partial class PartyProductWebApiContext : DbContext
     public virtual DbSet<ProductRateLog> ProductRateLogs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=LAPTOP-6FBJ3NLA;Database=PartyProductWebApi;Trusted_Connection=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-I8CAHS7;Database=PartyProductWebApi;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

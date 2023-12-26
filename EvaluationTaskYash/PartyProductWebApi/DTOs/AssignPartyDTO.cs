@@ -4,6 +4,9 @@
     {
         public int Id { get; set; }
 
+        public string PartyName { get; set; }
+
+        public string ProductName { get; set; }
         public int PartyId { get; set; }
         public int ProductId { get; set; }
 

@@ -16,9 +16,9 @@ public partial class AssignParty
     public int ProductId { get; set; }
 
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual Party Party { get; set; } = null!;
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual Product Product { get; set; } = null!;
 }

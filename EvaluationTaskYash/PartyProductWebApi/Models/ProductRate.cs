@@ -16,6 +16,6 @@ public partial class ProductRate
     public int Rate { get; set; }
 
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual Product Product { get; set; } = null!;
 }

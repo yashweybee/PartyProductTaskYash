@@ -1,3 +1,6 @@
+$(document).ready(function () {
+    $('#tableParty').DataTable();
+});
 const URL = 'https://localhost:7026/api/Party';
 
 
@@ -145,8 +148,3 @@ function editParty(id, objBody) {
 
 //started with this method
 getData(URL);
-
-// $(document).ready(function () {
-//     $('#tableParty').DataTable({
-//     });
-// });  

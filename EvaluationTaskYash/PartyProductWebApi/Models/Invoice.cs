@@ -24,10 +24,10 @@ public partial class Invoice
     public DateTime Date { get; set; }
 
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual Party Party { get; set; } = null!;
 
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual Product Product { get; set; } = null!;
 }
