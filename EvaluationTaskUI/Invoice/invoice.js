@@ -1,12 +1,22 @@
 const URL = 'https://localhost:7026/api/Invoice';
+const URL_Party = 'https://localhost:7026/api/Party';
+const URL_Product = 'https://localhost:7026/api/Product';
 
 
 const tableBody = document.querySelector('#Table-body');
 const addInvoiceBtn = document.querySelector('#addInvoice');
+const btnModelAdd = document.querySelector('#btnModelAdd');
 const downloadPDF = document.querySelector('#pdfDownload');
 const tabel = document.querySelector('#invoiceTable');
+const ddParty = document.querySelector('#ddParty');
+const ddProduct = document.querySelector('#ddProduct');
+const inputProductRate = document.querySelector('#inputProductRate');
+const inputQuantity = document.querySelector('#inputQuantity');
 
-addInvoiceBtn.addEventListener('click', onAddInvoice);
+let selectedParty, selectedProduct;
+
+addInvoiceBtn.addEventListener('click', openModel);
+btnModelAdd.addEventListener('click', onAddInvoice);
 downloadPDF.addEventListener('click', onDownloadPDF);
 
 // download PDF
@@ -18,22 +28,69 @@ function onDownloadPDF() {
     });
 }
 
-//adding Invoice
-function onAddInvoice() {
+ddParty.addEventListener('change', function (e) {
+    selectedParty = e.target.value;
+});
 
-    if (data.length === 0) {
-        alert("Enter valid data please!!");
-        return;
-    }
+ddProduct.addEventListener('change', function (e) {
+    selectedProduct = e.target.value;
+});
 
-    const objBody = {
-        name: data
-    }
-    addNewInvoice(objBody)
+
+async function openModel() {
+    const dataParty = await fetch(URL_Party).then(res => res.json());
+    setDropdownParty(dataParty);
+
+    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    setDropdownProduct(dataProduct);
+
+}
+function setDropdownParty(data) {
+    let allOptions = '';
+
+    data.forEach(ele => {
+        const singleOption =
+            `
+        <option value="${ele.id}">${ele.name}</option>
+        `;
+
+        allOptions += singleOption;
+    });
+
+    ddParty.innerHTML = allOptions;
 }
 
-function addNewInvoice(objBody) {
-    fetch(URL, {
+function setDropdownProduct(data) {
+    let allOptions = '';
+
+    data.forEach(ele => {
+        const singleOption =
+            `
+        <option value="${ele.id}">${ele.name}</option>
+        `;
+        allOptions += singleOption;
+    });
+
+    ddProduct.innerHTML = allOptions;
+}
+
+
+//adding Invoice on modal add btn click
+function onAddInvoice() {
+
+    const objBody = {
+        partyId: selectedParty,
+        productId: selectedProduct,
+        currentRate: inputProductRate.value,
+        quantity: inputQuantity.value,
+        data: new Date().toJSON()
+    }
+
+    addNewInvoice(objBody);
+}
+
+async function addNewInvoice(objBody) {
+    await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
         headers: {
@@ -41,7 +98,7 @@ function addNewInvoice(objBody) {
         }
     })
         .then(res => res.json())
-        .then(data => getData(URL));
+        .then(data => getData());
 }
 
 //Get all Parties
@@ -55,8 +112,11 @@ const getData = async function () {
 }
 
 const showTable = function (data) {
-    console.log(data);
     let allRows = '';
+    // fetch(URL_Party + `/${data.partyId}`)
+    //     .then(res => res.json())
+    //     .then(data => console.log(data))
+
     data.forEach(ele => {
         const oneRow =
             `
@@ -160,4 +220,3 @@ function editInvoice(id, objBody) {
 window.onload = function () {
     getData();
 };
-
