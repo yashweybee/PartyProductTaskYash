@@ -4,17 +4,24 @@ const URL_Product = 'https://localhost:7026/api/Product';
 
 const tableBody = document.querySelector('#Table-body');
 const ddParty = document.querySelector('#ddParty');
+const ddPartyEdit = document.querySelector('#ddPartyEdit');
+const ddProductEdit = document.querySelector('#ddProductEdit');
 const ddProduct = document.querySelector('#ddProduct');
 const model = document.querySelector('.modal');
 const btnCancle = document.querySelector('.btnCancle');
 const btnAddNewAssignParty = document.querySelector('#addAssignParty');
 const btnInModelAdd = document.querySelector('#btnAssignParty');
+const btnEditModel = document.querySelector('#btnEditModel');
 
-let selectedParty, selectedProduct;
+let selectedParty, selectedProduct, editedParty, editedProduct;
 
 btnAddNewAssignParty.addEventListener('click', openModel);
 
 btnInModelAdd.addEventListener('click', onAddAssignParty);
+
+btnEditModel.addEventListener('click', function () {
+    // onEditBtn(this);
+})
 
 btnCancle.addEventListener('click', function () {
     model.classList.add('hide');
@@ -24,9 +31,18 @@ ddParty.addEventListener('change', function (e) {
     selectedParty = e.target.value;
 });
 
+ddPartyEdit.addEventListener('change', function (e) {
+    editedParty = e.target.value;
+});
+
 ddProduct.addEventListener('change', function (e) {
     selectedProduct = e.target.value;
 });
+
+ddProductEdit.addEventListener('change', function (e) {
+    editedProduct = e.target.value;
+});
+
 
 //adding Party
 async function openModel() {
@@ -61,6 +77,7 @@ function setDropdownParty(data) {
     });
 
     ddParty.innerHTML = allOptions;
+    ddPartyEdit.innerHTML = allOptions;
 }
 
 function setDropdownProduct(data) {
@@ -75,6 +92,7 @@ function setDropdownProduct(data) {
     });
 
     ddProduct.innerHTML = allOptions;
+    ddProductEdit.innerHTML = allOptions;
 }
 
 // called after...
@@ -98,8 +116,7 @@ const getData = async function () {
             // model.classList.add('hide');
 
             showTable(data);
-        }
-        );
+        });
 }
 
 const showTable = function (data) {
@@ -111,7 +128,8 @@ const showTable = function (data) {
             <tr id = "${ele.id}">
                 <td>${ele.partyName}</td>
                 <td>${ele.productName}</td>
-                <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
+                <td><button type="button" id="${ele.id}" onClick = "onEditModelOpen()" class="btn btn-secondary" data-bs-toggle="modal"
+                data-bs-target="#editAssignParty">Edit </button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>
         `
@@ -161,26 +179,23 @@ function deleteAssignParty(id) {
         });
 }
 
-function editBtn(id, ele) {
-    // console.log(ele.parentNode.parentNode);
-    ele.parentNode.parentNode.style.backgroundColor = "red"
-
-    const data = prompt('Edit AssignParty Name');
-
-    if (data.length === 0) {
-        alert("Enter valid data please!!");
-        return;
-    }
-
-    const objBody = {
-        name: data
-    }
-    editAssignParty(id, objBody)
-
+function onEditModelOpen() {
+    //for setting dropdown data
+    openModel();
 }
+
+
+// collecting data and send to main edit function
+function onEditBtn(ele) {
+    // console.log(ele);
+    // const objBody = {
+    //     partyId: editedParty,
+    //     productId: editedProduct
+    // }
+    // editAssignParty(id, objBody);
+}
+
 function editAssignParty(id, objBody) {
-
-
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
