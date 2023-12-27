@@ -34,7 +34,7 @@ namespace PartyProductWebApi.Controllers
         public async Task<ActionResult<InvoiceDTO>> Get(int Id)
         {
 
-            var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.Id == Id);
+            var invoice = await _context.Invoices.Include(p => p.Party).Include(pr => pr.Product).FirstOrDefaultAsync(x => x.Id == Id);
             var invoiceDTO = _mapper.Map<InvoiceDTO>(invoice);
             return invoiceDTO;
         }

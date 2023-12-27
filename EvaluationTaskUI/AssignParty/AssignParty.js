@@ -22,9 +22,7 @@ btnAddNewAssignParty.addEventListener('click', openModel);
 
 btnInModelAdd.addEventListener('click', onAddAssignParty);
 
-btnEditModel.addEventListener('click', function (e) {
-    onEditBtn(e);
-})
+btnEditModel.addEventListener('click', onEditBtn);
 
 btnCancle.addEventListener('click', function () {
     model.classList.add('hide');
@@ -195,7 +193,7 @@ async function onEditModelOpen(ele) {
 
 
 // collecting data and send to main edit function
-function onEditBtn(ele) {
+function onEditBtn() {
     const objBody = {
         partyId: editedParty === undefined ? currentAssignPartyData.partyId : editedParty,
         productId: editedProduct === undefined ? currentAssignPartyData.productId : editedProduct

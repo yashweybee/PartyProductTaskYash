@@ -9,19 +9,29 @@ const URL_ProductRate = 'https://localhost:7026/api/ProductRate'
 const tableBody = document.querySelector('#Table-body');
 const addInvoiceBtn = document.querySelector('#addInvoice');
 const btnModelAdd = document.querySelector('#btnModelAdd');
+const btnModelEdit = document.querySelector('#btnModelEdit');
 const downloadPDF = document.querySelector('#pdfDownload');
 const tabel = document.querySelector('#invoiceTable');
 const ddParty = document.querySelector('#ddParty');
 const ddProduct = document.querySelector('#ddProduct');
+const ddPartyEdit = document.querySelector('#ddPartyEdit')
+const ddProductEdit = document.querySelector('#ddProductEdit')
 const inputProductRate = document.querySelector('#inputProductRate');
+const inputProductRateEdit = document.querySelector('#inputProductRateEdit');
 const inputQuantity = document.querySelector('#inputQuantity');
+const inputQuantityEdit = document.querySelector('#inputQuantityEdit');
+const lablePartyName = document.querySelector('#lablePartyName');
+const lableProductName = document.querySelector('#lableProductName');
 
 
 let selectedParty, selectedProduct, totalAmount = 0;
+let editedParty, editedProduct;
+let currentInvoice;
 let invoiceData = [];
 
 addInvoiceBtn.addEventListener('click', openModel);
 btnModelAdd.addEventListener('click', onAddInvoice);
+btnModelEdit.addEventListener('click', onEditBtn)
 
 // PDF Download Logic
 $(document).ready(function () {
@@ -84,11 +94,22 @@ ddParty.addEventListener('change', function (e) {
     selectedParty = e.target.value;
 });
 
+ddPartyEdit.addEventListener('change', function (e) {
+    editedParty = e.target.value;
+});
+
 ddProduct.addEventListener('change', async function (e) {
     selectedProduct = e.target.value;
     let productRate = await fetch(URL_ProductRate + `/${e.target.value}`).then(res => res.json());
     // console.log(productRate);
-    inputProductRate.value = productRate.rate
+    inputProductRate.value = productRate.rate;
+});
+
+ddProductEdit.addEventListener('change', async function (e) {
+    editedProduct = e.target.value;
+    let productRate = await fetch(URL_ProductRate + `/${e.target.value}`).then(res => res.json());
+    // console.log(productRate);
+    // inputProductRateEdit.value = productRate.rate
 });
 
 
@@ -98,9 +119,6 @@ async function openModel() {
 
     const dataProduct = await fetch(URL_Product).then(res => res.json());
     setDropdownProduct(dataProduct);
-
-
-
 }
 function setDropdownParty(data) {
     let allOptions = '<option selected value="">Select Party</option>';
@@ -115,6 +133,7 @@ function setDropdownParty(data) {
     });
 
     ddParty.innerHTML = allOptions;
+    ddPartyEdit.innerHTML = allOptions
 }
 
 function setDropdownProduct(data) {
@@ -129,6 +148,7 @@ function setDropdownProduct(data) {
     });
 
     ddProduct.innerHTML = allOptions;
+    ddProductEdit.innerHTML = allOptions
 }
 
 
@@ -181,7 +201,8 @@ const showTable = async function (data) {
                 <td>${ele.productName}</td>
                 <td>${ele.currentRate}</td>
                 <td>${ele.quantity}</td>
-                <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
+                <td><button type="button" id = "${ele.id}" onclick="onEditModelOpen(this)" data-bs-toggle="modal"
+                data-bs-target="#editInvoiceModal"  class="btn btn-secondary">Edit</button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>
         `
@@ -231,26 +252,31 @@ function deleteInvoice(id) {
         });
 }
 
-function editBtn(id, ele) {
-    // console.log(ele.parentNode.parentNode);
-    ele.parentNode.parentNode.style.backgroundColor = "red"
+async function onEditModelOpen(ele) {
+    //Setting drop-down data
+    openModel();
 
-    const data = prompt('Edit Invoice Name');
+    //fetching selected Invoice data
+    const data = await fetch(URL + `/${ele.id}`).then(res => res.json());
+    currentInvoice = data;
+    lablePartyName.textContent = currentInvoice.partyName;
+    lableProductName.textContent = currentInvoice.productName;
+    inputProductRateEdit.value = currentInvoice.currentRate;
+    inputQuantityEdit.value = currentInvoice.quantity;
+}
 
-    if (data.length === 0) {
-        alert("Enter valid data please!!");
-        return;
-    }
-
+function onEditBtn() {
     const objBody = {
-        name: data
+        partyId: editedParty === undefined ? currentInvoice.partyId : editedParty,
+        productId: editedProduct === undefined ? currentInvoice.productId : editedProduct,
+        currentRate: inputProductRateEdit.value,
+        quantity: inputQuantityEdit.value,
+        date: new Date()
     }
-    editInvoice(id, objBody)
+    editInvoice(currentInvoice.id, objBody)
 
 }
 function editInvoice(id, objBody) {
-
-
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
@@ -269,7 +295,6 @@ function editInvoice(id, objBody) {
             console.log(error);
 
         });
-
 }
 
 //started with this method
