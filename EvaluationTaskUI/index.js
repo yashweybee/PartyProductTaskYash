@@ -1,8 +1,11 @@
-$(document).ready(function () {
-    $('#tableParty').DataTable();
-});
-const URL = 'https://localhost:7026/api/Party';
+const tabledata = $('#tableParty').DataTable({
+    'columnDefs': [{
+        'targets': [1, 2], /* column index */
+        'orderable': false, /* true or false */
+    }]
+})
 
+const URL = 'https://localhost:7026/api/Party';
 
 const tableBody = document.querySelector('#Table-body');
 const addPatryBtn = document.querySelector('#addParty');
@@ -36,47 +39,43 @@ function addNewParty(objBody) {
         }
     })
         .then(res => res.json())
-        .then(data => getData(URL));
+        .then(data => getData());
 }
 
 //Get all Parties
-const getData = async function (URL) {
-    const data = await fetch(URL)
+const getData = async function () {
+    await fetch(URL)
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             showTable(data);
-        }
-        );
+        });
 }
 
 const showTable = function (data) {
+    console.log(data);
+    console.log("showdata func");
     let allRows = '';
     data.forEach(ele => {
         const oneRow =
             `
-            <tr id = "${ele.id}">
-                <td>${ele.name}</td>
-                <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
-                <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
-            </tr>
-        `
-        allRows += oneRow
+        <tr id = "${ele.id}">
+        <td>${ele.name}</td>
+        <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
+        <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
+        </tr>
+        `;
+        // allRows += oneRow
+        tabledata.row.add($(oneRow)).draw();
     });
 
+
     document.querySelectorAll(".btn-danger").forEach(ele => {
-        ele.addEventListener('click', function () {
+        ele.addEventListener('click', function (e) {
             deleteBtn(e)
         })
-    })
+    });
 
-
-    tableBody.innerHTML = allRows;
-}
-const addRows = function (name) {
-    let html = `
-    `
-    tableBody.insertAdjacentElement('afterbegin', html)
+    // tableBody.innerHTML = '';
 }
 
 //delete
@@ -98,7 +97,7 @@ function deleteParty(id) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            getData(URL);
+            getData();
 
         })
         .catch(error => {
@@ -109,7 +108,6 @@ function deleteParty(id) {
 
 function editBtn(id, ele) {
     // console.log(ele.parentNode.parentNode);
-    ele.parentNode.parentNode.style.backgroundColor = "red"
 
     const data = prompt('Edit Party Name');
 
@@ -140,7 +138,7 @@ function editParty(id, objBody) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            getData(URL);
+            getData();
 
         })
         .catch(error => {
@@ -151,4 +149,4 @@ function editParty(id, objBody) {
 }
 
 //started with this method
-getData(URL);
+getData();

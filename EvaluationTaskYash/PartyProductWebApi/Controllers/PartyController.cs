@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace PartyProductWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class PartyController : ControllerBase
     {
         public PartyProductWebApiContext _context { get; }
@@ -19,6 +21,7 @@ namespace PartyProductWebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
+
 
         [HttpGet]
         public async Task<ActionResult<List<PartyDTO>>> Get()
@@ -33,7 +36,7 @@ namespace PartyProductWebApi.Controllers
 
             var party = await _context.Parties.FirstOrDefaultAsync(x => x.Id == Id);
             var partyDTO = _mapper.Map<PartyDTO>(party);
-            return partyDTO;                                       
+            return partyDTO;
         }
 
         [HttpPost]
