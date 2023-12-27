@@ -14,6 +14,8 @@ addPatryBtn.addEventListener('click', onAddParty);
 function onAddParty() {
     const data = prompt('Enter Party Name');
 
+    if (data == null) return;
+
     if (data.length === 0) {
         alert("Enter valid data please!!");
         return;
@@ -110,6 +112,8 @@ function editBtn(id, ele) {
     ele.parentNode.parentNode.style.backgroundColor = "red"
 
     const data = prompt('Edit Party Name');
+
+    if (data == null) return;
 
     if (data.length === 0) {
         alert("Enter valid data please!!");

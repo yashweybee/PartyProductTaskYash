@@ -12,15 +12,18 @@ const btnCancle = document.querySelector('.btnCancle');
 const btnAddNewAssignParty = document.querySelector('#addAssignParty');
 const btnInModelAdd = document.querySelector('#btnAssignParty');
 const btnEditModel = document.querySelector('#btnEditModel');
+const lablePartyName = document.querySelector('#lablePartyName');
+const lableProductName = document.querySelector('#lableProductName');
 
 let selectedParty, selectedProduct, editedParty, editedProduct;
+let currentAssignPartyData;
 
 btnAddNewAssignParty.addEventListener('click', openModel);
 
 btnInModelAdd.addEventListener('click', onAddAssignParty);
 
-btnEditModel.addEventListener('click', function () {
-    // onEditBtn(this);
+btnEditModel.addEventListener('click', function (e) {
+    onEditBtn(e);
 })
 
 btnCancle.addEventListener('click', function () {
@@ -128,27 +131,23 @@ const showTable = function (data) {
             <tr id = "${ele.id}">
                 <td>${ele.partyName}</td>
                 <td>${ele.productName}</td>
-                <td><button type="button" id="${ele.id}" onClick = "onEditModelOpen()" class="btn btn-secondary" data-bs-toggle="modal"
+                <td><button type="button" id="${ele.id}" onclick="onEditModelOpen(this)" class="btn btn-secondary" data-bs-toggle="modal"
                 data-bs-target="#editAssignParty">Edit </button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>
-        `
+        `;
         allRows += oneRow
+        // console.log(ele.id);
+        // document.getElementById(`${ele.id}`).addEventListener('click', onEditModelOpen)
     });
 
     document.querySelectorAll(".btn-danger").forEach(ele => {
         ele.addEventListener('click', function () {
-            deleteBtn(e)
+            deleteBtn(e);
         })
-    })
-
+    });
 
     tableBody.innerHTML = allRows;
-}
-const addRows = function (name) {
-    let html = `
-    `
-    tableBody.insertAdjacentElement('afterbegin', html)
 }
 
 //delete
@@ -179,20 +178,29 @@ function deleteAssignParty(id) {
         });
 }
 
-function onEditModelOpen() {
+async function onEditModelOpen(ele) {
     //for setting dropdown data
     openModel();
+
+    //fetching data of selected assig party
+    const data = await fetch(URL + `/${ele.id}`).then(res => res.json());
+    console.log(data);
+    currentAssignPartyData = data;
+    // console.log(ddProductEdit.value);
+
+    //setting lables
+    lablePartyName.textContent = data.partyName;
+    lableProductName.textContent = data.productName;
 }
 
 
 // collecting data and send to main edit function
 function onEditBtn(ele) {
-    // console.log(ele);
-    // const objBody = {
-    //     partyId: editedParty,
-    //     productId: editedProduct
-    // }
-    // editAssignParty(id, objBody);
+    const objBody = {
+        partyId: editedParty === undefined ? currentAssignPartyData.partyId : editedParty,
+        productId: editedProduct === undefined ? currentAssignPartyData.productId : editedProduct
+    }
+    editAssignParty(currentAssignPartyData.id, objBody);
 }
 
 function editAssignParty(id, objBody) {

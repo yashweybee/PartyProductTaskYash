@@ -13,7 +13,7 @@ const modelPeoductRateLable = document.querySelector('#ModelProductRateName');
 let inpProductRate = document.querySelector('#inputProductRate');
 
 let selectedProduct;
-let currentProduct, currentProductRate;
+let currentProduct, selectedProductId;
 let productRateData = [];
 
 addProductBtn.addEventListener('click', openModel);
@@ -140,25 +140,23 @@ function deleteProductRate(id) {
 
 
 async function openEditModel(ele) {
-    console.log(ele.id);
-    const data = await fetch(URL_Product + `/13`)
-        .then(res => res.json())
-    console.log(data);
+    selectedProductId = ele.id;
 
-    // console.log(currentProduct);
-    // currentProductRate = inpProductRate;
-    // const preProductRate = productRateData.find(pr => pr.)
+    // fetching data of selected product-rate
+    const data = await fetch(URL + `/${selectedProductId}`).then(res => res.json());
+    currentProduct = data;
+    // console.log(data);
+    lableProductRateModel.innerHTML = currentProduct.productName;
+    editedRate.value = currentProduct.rate;
 
-    // lableProductRateModel.textContent = `${currentProduct.name}`
-    // editedRate.value = 
 }
 
 async function onEditBtnClick() {
-    // const objBody = {
-    //     productId: currentProduct.id,
-    //     rate: currentProductRate
-    // }
-    // editProductRate(id, objBody);
+    const objBody = {
+        productId: currentProduct.productId,
+        rate: editedRate.value
+    }
+    editProductRate(currentProduct.id, objBody);
 }
 function editProductRate(id, objBody) {
     fetch(`${URL}/${id}`, {
@@ -173,16 +171,13 @@ function editProductRate(id, objBody) {
                 throw new Error('Network response was not ok');
             }
             getData();
-
         })
         .catch(error => {
             console.log(error);
         });
-
 }
 
 //started with this method
 window.onload = function () {
     getData();
 };
-

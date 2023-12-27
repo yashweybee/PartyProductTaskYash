@@ -11,6 +11,8 @@ addPatryBtn.addEventListener('click', onAddProduct);
 function onAddProduct() {
     const data = prompt('Enter Product Name');
 
+    if (data == null) return;
+
     if (data.length === 0) {
         alert("Enter valid data please!!");
         return;
@@ -63,15 +65,9 @@ const showTable = function (data) {
         ele.addEventListener('click', function () {
             deleteBtn(e)
         })
-    })
-
+    });
 
     tableBody.innerHTML = allRows;
-}
-const addRows = function (name) {
-    let html = `
-    `
-    tableBody.insertAdjacentElement('afterbegin', html)
 }
 
 //delete
@@ -107,6 +103,7 @@ function editBtn(id, ele) {
     ele.parentNode.parentNode.style.backgroundColor = "red"
 
     const data = prompt('Edit Product Name');
+    if (data == null) return;
 
     if (data.length === 0) {
         alert("Enter valid data please!!");

@@ -34,7 +34,7 @@ namespace PartyProductWebApi.Controllers
         [HttpGet("{Id}", Name = "GetProdutRate")]
         public async Task<ActionResult<ProductRateDTO>> Get(int Id)
         {
-            var productRate = await _context.ProductRates.FirstOrDefaultAsync(x => x.Id == Id);
+            var productRate = await _context.ProductRates.Include(p => p.Product).FirstOrDefaultAsync(x => x.Id == Id);
             var productRateDTO = _mapper.Map<ProductRateDTO>(productRate);
             return Ok(productRateDTO);
         }
