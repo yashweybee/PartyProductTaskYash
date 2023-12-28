@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PartyProductWebApi.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -13,26 +14,27 @@ namespace EvaluationTaskYash.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
+        private readonly PartyProductWebApiContext _context;
 
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, PartyProductWebApiContext context)
         {
             _config = config;
+            _context = context;
         }
 
-        private Useres AuthenticateUser(Useres useres)
+        private Usere AuthenticateUser(Usere user)
         {
-            Useres _user = null;
-
-            //if (useres.UserName == "Admin" && useres.Password == "12345")
-            //{
-            //    _user = new Useres { UserName = "Yash" };
-            //}
-
+            Usere _user = null;
+            var _userDb = _context.Useres.FirstOrDefault(u => u.UserName == user.UserName);
+            if (_userDb.Password == user.Password)
+            {
+                _user = _userDb;
+            }
             return _user;
         }
 
 
-        private string GenerateTockens(Useres useres)
+        private string GenerateTockens(Usere user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -43,18 +45,28 @@ namespace EvaluationTaskYash.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login(Useres useres)
+        public IActionResult Login(Usere user)
         {
             IActionResult response = Unauthorized();
-            var user_ = AuthenticateUser(useres);
-            if (user_ != null)
+            var _user = AuthenticateUser(user);
+            if (_user != null)
             {
-                var token = GenerateTockens(user_);
+                var token = GenerateTockens(_user);
                 response = Ok(new { token = token });
             }
             return response;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(Usere user)
+        {
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

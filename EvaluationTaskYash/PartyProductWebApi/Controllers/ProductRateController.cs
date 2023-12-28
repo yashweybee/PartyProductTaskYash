@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using EvaluationTaskYash.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.DTOs;
-using PartyProductWebApi.Models;
+
 
 namespace PartyProductWebApi.Controllers
 {
@@ -22,7 +23,6 @@ namespace PartyProductWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductRateDTO>>> Get()
         {
-
             var productRate = await _context.ProductRates.Include(pr => pr.Product).ToListAsync();
 
             var mappedProductRates = productRate.Select(pr => _mapper.Map<ProductRateDTO>(pr)).ToList();

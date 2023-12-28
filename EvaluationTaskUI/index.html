@@ -52,6 +52,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="Invoice/invoice.html">Invoice</a>
                     </li>
+                    <button id="btnLogout" class="btn btn-link" type="submit">Logout</button>
                 </ul>
             </div>
         </div>
@@ -83,9 +84,16 @@
         </table>
     </div>
 
-
-
     <script defer src="index.js"></script>
+    <script>
+        const btnLogout = document.querySelector('#btnLogout');
+        btnLogout.addEventListener('click', function () {
+            if (confirm("Are you sure to logout?")) {
+                localStorage.removeItem("token");
+                window.location.replace("./Authentication/Login.html");
+            }
+        });
+    </script>
 </body>
 
 </html>

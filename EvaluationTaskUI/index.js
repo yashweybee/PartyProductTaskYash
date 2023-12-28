@@ -144,8 +144,14 @@ function editParty(id, objBody) {
             console.log(error);
 
         });
-
 }
 
 //started with this method
-getData();
+window.onload = function () {
+    console.log(localStorage.getItem("token"));
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("./Authentication/Login.html");
+    } else {
+        getData();
+    }
+};

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace PartyProductWebApi.Models;
+namespace EvaluationTaskYash.Models;
 
 public partial class ProductRateLog
 {
     public int Id { get; set; }
-
 
     public int ProductId { get; set; }
 
@@ -15,6 +13,5 @@ public partial class ProductRateLog
 
     public DateTime Date { get; set; }
 
-    [JsonIgnore]
     public virtual Product Product { get; set; } = null!;
 }

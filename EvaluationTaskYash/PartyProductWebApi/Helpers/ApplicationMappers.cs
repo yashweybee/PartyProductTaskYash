@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using EvaluationTaskYash.Models;
 using PartyProductWebApi.DTOs;
-using PartyProductWebApi.Models;
+
 
 namespace PartyProductWebApi.Helpers
 {

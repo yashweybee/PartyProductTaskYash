@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using EvaluationTaskYash.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.DTOs;
-using PartyProductWebApi.Models;
 
 namespace PartyProductWebApi.Controllers
 {

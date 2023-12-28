@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace PartyProductWebApi.Models;
+namespace EvaluationTaskYash.Models;
 
 public partial class PartyProductWebApiContext : DbContext
 {
@@ -27,8 +27,9 @@ public partial class PartyProductWebApiContext : DbContext
 
     public virtual DbSet<ProductRateLog> ProductRateLogs { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-I8CAHS7;Database=PartyProductWebApi;Trusted_Connection=True;TrustServerCertificate=True");
+    public virtual DbSet<Usere> Useres { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Server=DESKTOP-I8CAHS7;Database=PartyProductWebApi;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -104,6 +105,14 @@ public partial class PartyProductWebApiContext : DbContext
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ProductRa__Produ__44FF419A");
+        });
+
+        modelBuilder.Entity<Usere>(entity =>
+        {
+            entity.ToTable("useres");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.UserName).HasColumnName("userName");
         });
 
         OnModelCreatingPartial(modelBuilder);
