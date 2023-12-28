@@ -22,10 +22,12 @@ namespace EvaluationTaskYash.Controllers
         private Useres AuthenticateUser(Useres useres)
         {
             Useres _user = null;
-            if (useres.UserName == "Admin" && useres.Password == "12345")
-            {
-                _user = new Useres { UserName = "Yash" };
-            }
+
+            //if (useres.UserName == "Admin" && useres.Password == "12345")
+            //{
+            //    _user = new Useres { UserName = "Yash" };
+            //}
+
             return _user;
         }
 

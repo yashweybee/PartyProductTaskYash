@@ -74,7 +74,6 @@ const showTable = function (data) {
             deleteBtn(e)
         })
     });
-
     // tableBody.innerHTML = '';
 }
 
