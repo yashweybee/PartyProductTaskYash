@@ -179,5 +179,10 @@ function editProductRate(id, objBody) {
 
 //started with this method
 window.onload = function () {
-    getData();
+    // console.log("Bearer " + localStorage.getItem("token"));
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
 };

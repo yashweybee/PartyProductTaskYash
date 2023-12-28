@@ -3,7 +3,12 @@
 const URL = 'https://localhost:7026/api/Invoice';
 const URL_Party = 'https://localhost:7026/api/Party';
 const URL_Product = 'https://localhost:7026/api/Product';
-const URL_ProductRate = 'https://localhost:7026/api/ProductRate'
+const URL_ProductRate = 'https://localhost:7026/api/ProductRate';
+
+const mainHeader = {
+    "content-type": "application/json",
+    "Authorization": "Bearer " + localStorage.getItem("token")
+};
 
 
 const tableBody = document.querySelector('#Table-body');
@@ -103,24 +108,35 @@ ddPartyEdit.addEventListener('change', function (e) {
 
 ddProduct.addEventListener('change', async function (e) {
     selectedProduct = e.target.value;
-    let productRate = await fetch(URL_ProductRate + `/${e.target.value}`).then(res => res.json());
-    // console.log(productRate);
+    let productRate = await fetch(URL_ProductRate + `/${e.target.value}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
+    console.log(selectedProduct);
     inputProductRate.value = productRate.rate;
 });
 
 ddProductEdit.addEventListener('change', async function (e) {
     editedProduct = e.target.value;
-    let productRate = await fetch(URL_ProductRate + `/${e.target.value}`).then(res => res.json());
+    let productRate = await fetch(URL_ProductRate + `/${e.target.value}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     // console.log(productRate);
-    // inputProductRateEdit.value = productRate.rate
+    // inputProductRateEdit.value = productRate.rate;
 });
 
-
 async function openModel() {
-    const dataParty = await fetch(URL_Party).then(res => res.json());
+    const dataParty = await fetch(URL_Party, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     setDropdownParty(dataParty);
 
-    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    const dataProduct = await fetch(URL_Product, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     setDropdownProduct(dataProduct);
 }
 function setDropdownParty(data) {
@@ -173,9 +189,7 @@ async function addNewInvoice(objBody) {
     await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(res => res.json())
         .then(data => getData());
@@ -183,7 +197,10 @@ async function addNewInvoice(objBody) {
 
 //Get all Parties
 const getData = async function () {
-    const data = await fetch(URL)
+    const data = await fetch(URL, {
+        method: 'GET',
+        headers: mainHeader
+    })
         .then(res => res.json())
         .then(data => {
             invoiceData = data;
@@ -194,9 +211,7 @@ const getData = async function () {
 const showTable = async function (data) {
     console.log(data);
     let allRows = '';
-
     data.forEach(ele => {
-
         const oneRow =
             `
             <tr id = "${ele.id}">
@@ -238,9 +253,7 @@ function deleteBtn(id) {
 function deleteInvoice(id) {
     fetch(`${URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
@@ -260,7 +273,10 @@ async function onEditModelOpen(ele) {
     openModel();
 
     //fetching selected Invoice data
-    const data = await fetch(URL + `/${ele.id}`).then(res => res.json());
+    const data = await fetch(URL + `/${ele.id}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     currentInvoice = data;
     lablePartyName.textContent = currentInvoice.partyName;
     lableProductName.textContent = currentInvoice.productName;
@@ -283,9 +299,7 @@ function editInvoice(id, objBody) {
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
@@ -302,5 +316,10 @@ function editInvoice(id, objBody) {
 
 //started with this method
 window.onload = function () {
-    getData();
+    // console.log("Bearer " + localStorage.getItem("token"));
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
 };

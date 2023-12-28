@@ -112,7 +112,6 @@ async function getSetEditData(id) {
 
 function onEditBtn() {
     currentProductName = inputProductEdit.value;
-
     const objBody = {
         name: currentProductName
     }
@@ -145,6 +144,11 @@ function editProduct(id, objBody) {
 
 //started with this method
 window.onload = function () {
-    getData();
+    // console.log("Bearer " + localStorage.getItem("token"));
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
 };
 

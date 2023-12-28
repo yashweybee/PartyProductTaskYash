@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EvaluationTaskYash.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace PartyProductWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AssignPartyController : ControllerBase
     {
         public PartyProductWebApiContext _context { get; }

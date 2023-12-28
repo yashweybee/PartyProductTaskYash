@@ -7,9 +7,8 @@
 
 const mainHeader = {
     "content-type": "application/json",
-    Authorization: "Bearer " + localStorage.getItem("token")
-}
-
+    "Authorization": "Bearer " + localStorage.getItem("token")
+};
 console.log(mainHeader);
 
 const URL = 'https://localhost:7026/api/Party';
@@ -56,7 +55,10 @@ function addNewParty(objBody) {
 
 //Get all Parties
 const getData = async function () {
-    await fetch(URL)
+    await fetch(URL, {
+        method: 'GET',
+        headers: mainHeader
+    })
         .then(res => res.json())
         .then(data => {
             showTable(data);
@@ -65,7 +67,6 @@ const getData = async function () {
 
 const showTable = function (data) {
     console.log(data);
-    console.log("showdata func");
     let allRows = '';
     data.forEach(ele => {
         const oneRow =
@@ -118,7 +119,10 @@ function deleteParty(id) {
 
 async function getSetEditData(id) {
     // console.log(ele.parentNode.parentNode);
-    currentParty = await fetch(URL + `/${id}`).then(res => res.json());
+    currentParty = await fetch(URL + `/${id}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     inputPartyEdit.value = currentParty.name;
 }
 

@@ -2,6 +2,11 @@ const URL = 'https://localhost:7026/api/AssignParty';
 const URL_Party = 'https://localhost:7026/api/Party';
 const URL_Product = 'https://localhost:7026/api/Product';
 
+const mainHeader = {
+    "content-type": "application/json",
+    "Authorization": "Bearer " + localStorage.getItem("token")
+};
+
 const tableBody = document.querySelector('#Table-body');
 const ddParty = document.querySelector('#ddParty');
 const ddPartyEdit = document.querySelector('#ddPartyEdit');
@@ -47,10 +52,16 @@ ddProductEdit.addEventListener('change', function (e) {
 
 //adding Party
 async function openModel() {
-    const dataParty = await fetch(URL_Party).then(res => res.json());
+    const dataParty = await fetch(URL_Party, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     setDropdownParty(dataParty);
 
-    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    const dataProduct = await fetch(URL_Product, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     setDropdownProduct(dataProduct);
 
 }
@@ -101,9 +112,7 @@ async function addNewAssignParty(objBody) {
     await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: headers
     })
         .then(res => res.json())
         .then(data => getData());
@@ -111,11 +120,12 @@ async function addNewAssignParty(objBody) {
 
 //Get all Parties
 const getData = async function () {
-    await fetch(URL)
+    await fetch(URL, {
+        method: 'GET',
+        headers: mainHeader
+    })
         .then(res => res.json())
         .then(data => {
-            // model.classList.add('hide');
-
             showTable(data);
         });
 }
@@ -159,9 +169,7 @@ function deleteBtn(id) {
 function deleteAssignParty(id) {
     fetch(`${URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
@@ -181,7 +189,10 @@ async function onEditModelOpen(ele) {
     openModel();
 
     //fetching data of selected assig party
-    const data = await fetch(URL + `/${ele.id}`).then(res => res.json());
+    const data = await fetch(URL + `/${ele.id}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     console.log(data);
     currentAssignPartyData = data;
     // console.log(ddProductEdit.value);
@@ -205,9 +216,7 @@ function editAssignParty(id, objBody) {
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
@@ -220,11 +229,15 @@ function editAssignParty(id, objBody) {
             console.log(error);
 
         });
-
 }
 
 //started with this method
 window.onload = function () {
-    getData();
+    // console.log("Bearer " + localStorage.getItem("token"));
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
 };
 
