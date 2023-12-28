@@ -67,10 +67,12 @@ const reciptDataEntering = async function () {
 
         var PartyRow = row.insertCell(0);
         var ProductRow = row.insertCell(1);
-        var AmountRow = row.insertCell(2);
+        var QuantityRow = row.insertCell(2);
+        var AmountRow = row.insertCell(3);
 
         PartyRow.classList.add('col-md-9');
         ProductRow.classList.add('col-md-9');
+        QuantityRow.classList.add('col-md-9');
         AmountRow.classList.add('col-md-3');
 
         if (thisPartyId !== inv.partyId) {
@@ -80,6 +82,7 @@ const reciptDataEntering = async function () {
             PartyRow.textContent = "";
         }
         ProductRow.innerHTML = `${inv.productName}`;
+        QuantityRow.innerHTML = `${inv.quantity}`;
         AmountRow.innerHTML = `${inv.currentRate}`;
     })
 

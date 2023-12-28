@@ -45,7 +45,6 @@ namespace EvaluationTaskYash.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login(Usere user)
@@ -64,9 +63,14 @@ namespace EvaluationTaskYash.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(Usere user)
         {
+            //var _useres = _context.Useres.FirstOrDefault(u => u.UserName == user.UserName);
+            //if (_useres != null)
+            //{
             _context.Add(user);
             await _context.SaveChangesAsync();
             return Ok();
+            //}
+            //return BadRequest();
         }
     }
 }

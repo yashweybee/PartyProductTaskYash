@@ -25,6 +25,9 @@ async function postingData(objBody) {
         }
     })
         .then(res => res.json())
-        .catch(er => console.log(er));
+        .catch(er => {
+            window.location.replace("./login.html");
+            console.log(er)
+        });
     console.log(userData);
 }

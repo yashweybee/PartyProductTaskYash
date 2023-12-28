@@ -59,29 +59,71 @@
     </nav>
 
     <div class="text-center">
-        <button type="button" id="addParty" class="btn btn-primary">Add Party</button>
+        <!-- <button type="button" id="addParty" class="btn btn-primary">Add Party</button> -->
+        <button type="button" id="addProduct" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#btnAddParty">Add Party</button>
     </div>
 
-
     <!-- Main Content -->
-    <div class="container">
-        <table id="tableParty" class="table table-striped table-hover text-center">
-            <thead>
-                <tr>
-                    <!-- <th scope="col">#</th> -->
-                    <th class="text-center" scope="col">Party Name</th>
-                    <th class="text-center" scope="col">Edit</th>
-                    <th class="text-center" scope="col">Delete</th>
-                </tr>
-            </thead>
-            <tbody id="Table-body">
-                <!-- <tr>
+    <!-- <div class="container"> -->
+    <table id="tableParty" class="table table-striped table-hover text-center">
+        <thead>
+            <tr>
+                <!-- <th scope="col">#</th> -->
+                <th class="text-center" scope="col">Party Name</th>
+                <th class="text-center" scope="col">Edit</th>
+                <th class="text-center" scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody id="Table-body">
+            <!-- <tr>
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>@mdo</td>
             </tr> -->
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+    <!-- </div> -->
+
+
+    <!-- Adding new party -->
+    <div class="modal fade" id="btnAddParty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Party</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="party-name" class="form-label">Party name</label>
+                    <input type="text" class="form-control" id="inputParty" aria-describedby="emailHelp">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" id="btnAddModel" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit new party -->
+    <div class="modal fade" id="btnEditParty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Party</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="party-name" class="form-label">Party name</label>
+                    <input type="text" class="form-control" id="inputPartyEdit" aria-describedby="emailHelp">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" id="btnEditModel" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script defer src="index.js"></script>
