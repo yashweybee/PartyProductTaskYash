@@ -50,7 +50,8 @@
     </nav>
 
     <div class="text-center">
-        <button type="button" id="addProduct" class="btn btn-primary">Add Product</button>
+        <button type="button" id="addProduct" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#btnAddPoduct">Add Product</button>
     </div>
 
 
@@ -72,6 +73,46 @@
             </tr> -->
         </tbody>
     </table>
+
+    <!-- Adding new product -->
+    <div class="modal fade" id="btnAddPoduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="product" class="form-label">Product name</label>
+                    <input type="text" class="form-control" id="inputProduct" aria-describedby="emailHelp">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" id="btnAddModel" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit new product -->
+    <div class="modal fade" id="btnEditProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="product-name" class="form-label">Product name</label>
+                    <input type="text" class="form-control" id="inputProductEdit" aria-describedby="emailHelp">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+                    <button type="button" id="btnEditModel" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script defer src="product.js"></script>

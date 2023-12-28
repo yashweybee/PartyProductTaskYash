@@ -15,7 +15,6 @@ console.log(mainHeader);
 const URL = 'https://localhost:7026/api/Party';
 
 const tableBody = document.querySelector('#Table-body');
-const addPatryBtn = document.querySelector('#addParty');
 const btnAddModel = document.querySelector('#btnAddModel');
 const inputParty = document.querySelector('#inputParty');
 const inputPartyEdit = document.querySelector('#inputPartyEdit');
@@ -25,9 +24,6 @@ let currentPartyName, currentParty;
 
 btnAddModel.addEventListener('click', onAddParty);
 btnEditModel.addEventListener('click', onEditBtn)
-
-
-
 
 //adding Party
 function onAddParty() {
@@ -44,7 +40,8 @@ function onAddParty() {
     const objBody = {
         name: inpPartyName
     }
-    addNewParty(objBody)
+    addNewParty(objBody);
+    inputParty.value = ""
 }
 
 function addNewParty(objBody) {
@@ -105,9 +102,7 @@ function deleteBtn(id) {
 function deleteParty(id) {
     fetch(`${URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
@@ -125,11 +120,6 @@ async function getSetEditData(id) {
     // console.log(ele.parentNode.parentNode);
     currentParty = await fetch(URL + `/${id}`).then(res => res.json());
     inputPartyEdit.value = currentParty.name;
-
-    // if (currentPartyName.length === 0) {
-    //     alert("Enter valid data please!!");
-    //     return;
-    // }
 }
 
 // Model edit Btn clicked

@@ -1,27 +1,32 @@
 const URL = 'https://localhost:7026/api/Product';
 
-
 const tableBody = document.querySelector('#Table-body');
-const addPatryBtn = document.querySelector('#addProduct');
+const btnAddModel = document.querySelector('#btnAddModel');
+const btnEditModel = document.querySelector('#btnEditModel');
+const inputProduct = document.querySelector('#inputProduct');
+const inputProductEdit = document.querySelector('#inputProductEdit');
 
-addPatryBtn.addEventListener('click', onAddProduct);
+let currentProductName, currentProduct;
 
+btnAddModel.addEventListener('click', onAddProduct);
+btnEditModel.addEventListener('click', onEditBtn);
 
 //adding Product
 function onAddProduct() {
-    const data = prompt('Enter Product Name');
+    const inputedProduct = inputProduct.value;
 
-    if (data == null) return;
+    if (inputedProduct == null) return;
 
-    if (data.length === 0) {
+    if (inputedProduct.length === 0) {
         alert("Enter valid data please!!");
         return;
     }
 
     const objBody = {
-        name: data
+        name: inputedProduct
     }
-    addNewProduct(objBody)
+    addNewProduct(objBody);
+    inputProduct.value = "";
 }
 
 function addNewProduct(objBody) {
@@ -54,11 +59,12 @@ const showTable = function (data) {
             `
             <tr id = "${ele.id}">
                 <td>${ele.name}</td>
-                <td><button type="button" id = "${ele.id}" onclick="editBtn(this.id, this)"  class="btn btn-secondary">Edit</button></td>
+                <td><button type="button" id = "${ele.id}" onclick="getSetEditData(this.id)" data-bs-toggle="modal"
+                data-bs-target="#btnEditProduct"  class="btn btn-secondary">Edit</button></td>
                 <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
             </tr>
         `
-        allRows += oneRow
+        allRows += oneRow;
     });
 
     document.querySelectorAll(".btn-danger").forEach(ele => {
@@ -98,23 +104,20 @@ function deleteProduct(id) {
         });
 }
 
-function editBtn(id, ele) {
+async function getSetEditData(id) {
     // console.log(ele.parentNode.parentNode);
-    ele.parentNode.parentNode.style.backgroundColor = "red"
+    currentProduct = await fetch(URL + `/${id}`).then(res => res.json());
+    inputProductEdit.value = currentProduct.name;
+}
 
-    const data = prompt('Edit Product Name');
-    if (data == null) return;
-
-    if (data.length === 0) {
-        alert("Enter valid data please!!");
-        return;
-    }
+function onEditBtn() {
+    currentProductName = inputProductEdit.value;
 
     const objBody = {
-        name: data
+        name: currentProductName
     }
-    editProduct(id, objBody)
 
+    editProduct(currentProduct.id, objBody)
 }
 function editProduct(id, objBody) {
 
