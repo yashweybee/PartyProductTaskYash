@@ -1,5 +1,10 @@
 const URL = 'https://localhost:7026/api/ProductRate';
-const URL_Product = 'https://localhost:7026/api/Product'
+const URL_Product = 'https://localhost:7026/api/Product';
+
+const mainHeader = {
+    "content-type": "application/json",
+    "Authorization": "Bearer " + localStorage.getItem("token")
+};
 
 const tableBody = document.querySelector('#Table-body');
 const addProductBtn = document.querySelector('#addProduct');
@@ -28,7 +33,10 @@ ddProductRate.addEventListener('change', function (e) {
 
 //On open Modal
 async function openModel() {
-    const dataProduct = await fetch(URL_Product).then(res => res.json());
+    const dataProduct = await fetch(URL_Product, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     setDropdownProduct(dataProduct);
 }
 
@@ -63,9 +71,7 @@ async function addNewProductRate(objBody) {
     await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(res => res.json())
         .then(data => getData());
@@ -73,7 +79,10 @@ async function addNewProductRate(objBody) {
 
 //Get all ProductRates Details
 const getData = async function () {
-    await fetch(URL)
+    await fetch(URL, {
+        method: 'GET',
+        headers: mainHeader
+    })
         .then(res => res.json())
         .then(data => {
             productRateData = data;
@@ -122,16 +131,13 @@ function deleteBtn(id) {
 function deleteProductRate(id) {
     fetch(`${URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             getData();
-
         })
         .catch(error => {
             console.log(error);
@@ -143,7 +149,10 @@ async function openEditModel(ele) {
     selectedProductId = ele.id;
 
     // fetching data of selected product-rate
-    const data = await fetch(URL + `/${selectedProductId}`).then(res => res.json());
+    const data = await fetch(URL + `/${selectedProductId}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     currentProduct = data;
     // console.log(data);
     lableProductRateModel.innerHTML = currentProduct.productName;
@@ -162,9 +171,7 @@ function editProductRate(id, objBody) {
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {

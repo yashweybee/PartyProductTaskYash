@@ -1,5 +1,10 @@
 const URL = 'https://localhost:7026/api/Product';
 
+const mainHeader = {
+    "content-type": "application/json",
+    "Authorization": "Bearer " + localStorage.getItem("token")
+};
+
 const tableBody = document.querySelector('#Table-body');
 const btnAddModel = document.querySelector('#btnAddModel');
 const btnEditModel = document.querySelector('#btnEditModel');
@@ -33,9 +38,7 @@ function addNewProduct(objBody) {
     fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(res => res.json())
         .then(data => getData(URL));
@@ -43,7 +46,10 @@ function addNewProduct(objBody) {
 
 //Get all Parties
 const getData = async function () {
-    await fetch(URL)
+    await fetch(URL, {
+        method: 'GET',
+        headers: mainHeader
+    })
         .then(res => res.json())
         .then(data => {
             console.log(data);
@@ -87,15 +93,13 @@ function deleteBtn(id) {
 function deleteProduct(id) {
     fetch(`${URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            getData(URL);
+            getData();
 
         })
         .catch(error => {
@@ -106,7 +110,10 @@ function deleteProduct(id) {
 
 async function getSetEditData(id) {
     // console.log(ele.parentNode.parentNode);
-    currentProduct = await fetch(URL + `/${id}`).then(res => res.json());
+    currentProduct = await fetch(URL + `/${id}`, {
+        method: 'GET',
+        headers: mainHeader
+    }).then(res => res.json());
     inputProductEdit.value = currentProduct.name;
 }
 
@@ -119,27 +126,17 @@ function onEditBtn() {
     editProduct(currentProduct.id, objBody)
 }
 function editProduct(id, objBody) {
-
-
     fetch(`${URL}/${id}`, {
         method: 'PUT',
         body: JSON.stringify(objBody),
-        headers: {
-            "content-type": "application/json"
-        }
+        headers: mainHeader
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            getData(URL);
-
+        .then(res => {
+            getData();
         })
         .catch(error => {
             console.log(error);
-
         });
-
 }
 
 //started with this method
@@ -151,4 +148,3 @@ window.onload = function () {
         getData();
     }
 };
-

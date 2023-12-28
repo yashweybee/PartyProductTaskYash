@@ -9,7 +9,6 @@ const mainHeader = {
     "content-type": "application/json",
     "Authorization": "Bearer " + localStorage.getItem("token")
 };
-console.log(mainHeader);
 
 const URL = 'https://localhost:7026/api/Party';
 
