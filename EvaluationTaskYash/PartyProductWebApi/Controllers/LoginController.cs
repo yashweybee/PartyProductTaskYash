@@ -63,14 +63,14 @@ namespace EvaluationTaskYash.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(Usere user)
         {
-            //var _useres = _context.Useres.FirstOrDefault(u => u.UserName == user.UserName);
-            //if (_useres != null)
-            //{
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok();
-            //}
-            //return BadRequest();
+            var _useres = _context.Useres.Any(u => u.UserName == user.UserName);
+            if (!_useres)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return Ok(user);
+            }
+            return BadRequest();
         }
     }
 }

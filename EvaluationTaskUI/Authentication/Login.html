@@ -15,6 +15,8 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
     <title>Login</title>
 </head>
 <style>
@@ -31,11 +33,17 @@
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card bg-dark text-white" style="border-radius: 1rem;">
                         <div class="card-body p-5 text-center">
-
                             <div class="mb-md-5 mt-md-4 pb-5">
-
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-white-50 mb-5">Please enter your username and password!</p>
+
+                                <!-- Error alert -->
+                                <div class="alert alert-danger collapse" id="success-alert">
+                                    <strong>ERROR</strong>
+                                    <span id="alertMessage"> Username or Password invalid!!!</span>
+                                </div>
+
+
 
                                 <div class="form-outline form-white mb-4">
                                     <label class="form-label" for="typeEmailX">Username</label>

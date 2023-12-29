@@ -84,6 +84,8 @@
     </table>
     <!-- </div> -->
 
+
+
     <!-- Adding new party -->
     <div class="modal fade" id="btnAddParty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -92,13 +94,20 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Party</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <!-- success alert -->
+                <div class="alert alert-success collapse" id="success-alert">
+                    <strong>Success!</strong>
+                    Party added.
+                </div>
+
                 <div class="modal-body">
                     <label for="party-name" class="form-label">Party name</label>
                     <input type="text" class="form-control" id="inputParty" aria-describedby="emailHelp">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                    <button type="button" id="btnAddModel" class="btn btn-primary">Add</button>
+                    <button type="button" id="btnAddModel" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
                 </div>
             </div>
         </div>
@@ -118,11 +127,38 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                    <button type="button" id="btnEditModel" class="btn btn-primary">Edit</button>
+                    <button type="button" id="btnEditModel" class="btn btn-primary"
+                        data-bs-dismiss="modal">Edit</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- delete party confirmation -->
+    <div class="modal fade" id="deleteParty" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Party</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="party-name" class="form-label">This will delete the record. Once deleted can not be
+                        rolled back.
+                        Do you want to proceed?</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" id="btnDeleteModel" class="btn btn-primary"
+                        data-bs-dismiss="modal">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <script defer src="index.js"></script>
     <script>

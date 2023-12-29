@@ -5,6 +5,8 @@
 //     }]
 // });
 
+
+
 const mainHeader = {
     "content-type": "application/json",
     "Authorization": "Bearer " + localStorage.getItem("token")
@@ -17,11 +19,24 @@ const btnAddModel = document.querySelector('#btnAddModel');
 const inputParty = document.querySelector('#inputParty');
 const inputPartyEdit = document.querySelector('#inputPartyEdit');
 const btnEditModel = document.querySelector('#btnEditModel');
-
-let currentPartyName, currentParty;
+const btnDeleteModel = document.querySelector('#btnDeleteModel');
+const alertNode = document.querySelector('.alert')
+const alert = bootstrap.Alert.getInstance(alertNode);
+let currentPartyName, currentParty, currentPartyId;
 
 btnAddModel.addEventListener('click', onAddParty);
-btnEditModel.addEventListener('click', onEditBtn)
+btnEditModel.addEventListener('click', onEditBtn);
+btnDeleteModel.addEventListener('click', () => deleteParty(currentPartyId));
+
+
+// Shows alert message
+function alertShowHide() {
+    $('.alert').show();
+    $("#success-alert").fadeTo(1000, 300).slideUp(300, function () {
+        $("#success-alert").slideUp(500);
+    });
+}
+
 
 //adding Party
 function onAddParty() {
@@ -39,9 +54,12 @@ function onAddParty() {
         name: inpPartyName
     }
     addNewParty(objBody);
-    inputParty.value = ""
+    inputParty.value = "";
+    alertShowHide();
 }
 
+
+// calling api and adding new party
 function addNewParty(objBody) {
     fetch(URL, {
         method: 'POST',
@@ -73,8 +91,9 @@ const showTable = function (data) {
         <tr id = "${ele.id}">
         <td>${ele.name}</td>
         <td><button type="button" id = "${ele.id}" onclick="getSetEditData(this.id)" data-bs-toggle="modal"
-        data-bs-target="#btnEditParty"  class="btn btn-secondary">Edit</button></td>
-        <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
+        data-bs-target="#btnEditParty" class="btn btn-secondary">Edit</button></td>
+        <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" data-bs-toggle="modal"
+        data-bs-target="#deleteParty" class="btn btn-danger">Delete</button></td>
         </tr>
         `;
 
@@ -94,13 +113,15 @@ const showTable = function (data) {
 //delete
 function deleteBtn(id) {
     console.log(id);
-    if (confirm("Are your to delete Party??")) {
-        deleteParty(id);
-    }
+    currentPartyId = id;
+    // if (confirm("Are sure to delete Party??")) {
+    //     deleteParty(id);
+    // }
 }
 
 function deleteParty(id) {
-    fetch(`${URL}/${id}`, {
+    // console.log(`${URL}/${id}`);
+    fetch(URL + `/${id}`, {
         method: 'DELETE',
         headers: mainHeader
     })
@@ -109,10 +130,10 @@ function deleteParty(id) {
                 throw new Error('Network response was not ok');
             }
             getData();
+            return response.json();
         })
         .catch(error => {
             console.log(error);
-
         });
 }
 

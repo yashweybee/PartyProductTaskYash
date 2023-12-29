@@ -3,8 +3,18 @@ const URL = 'https://localhost:7026/api/Login/Register';
 const inputUsername = document.querySelector('#inputUsername');
 const inputPassword = document.querySelector('#inputPassword');
 const btnRegister = document.querySelector('#btnRegister');
+const alertNode = document.querySelector('.alert')
+const alert = bootstrap.Alert.getInstance(alertNode);
 
-btnRegister.addEventListener('click', onBtnRegister)
+btnRegister.addEventListener('click', onBtnRegister);
+
+// Shows alert message
+function alertAnimation() {
+    $('.alert').show();
+    $("#success-alert").fadeTo(2000, 200).slideUp(500, function () {
+        $("#success-alert").slideUp(500);
+    });
+}
 
 function onBtnRegister() {
     const objBody = {
@@ -26,8 +36,14 @@ async function postingData(objBody) {
     })
         .then(res => res.json())
         .catch(er => {
-            window.location.replace("./login.html");
             console.log(er)
         });
-    console.log(userData);
+
+    // if user is new then redirect to login page
+    if (userData.userName) window.location.replace("./login.html");
+
+    // if user is already exists
+    if (userData.status == 400) {
+        alertAnimation();
+    }
 }

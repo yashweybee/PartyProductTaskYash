@@ -49,7 +49,6 @@ ddProductEdit.addEventListener('change', function (e) {
     editedProduct = e.target.value;
 });
 
-
 //adding Party
 async function openModel() {
     const dataParty = await fetch(URL_Party, {
@@ -112,7 +111,7 @@ async function addNewAssignParty(objBody) {
     await fetch(URL, {
         method: 'POST',
         body: JSON.stringify(objBody),
-        headers: headers
+        headers: mainHeader
     })
         .then(res => res.json())
         .then(data => getData());
