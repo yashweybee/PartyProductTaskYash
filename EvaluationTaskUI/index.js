@@ -1,12 +1,3 @@
-// const tabledata = $('#tableParty').DataTable({
-//     'columnDefs': [{
-//         'targets': [1, 2], /* column index */
-//         'orderable': false, /* true or false */
-//     }]
-// });
-
-
-
 const mainHeader = {
     "content-type": "application/json",
     "Authorization": "Bearer " + localStorage.getItem("token")
@@ -27,7 +18,6 @@ let currentPartyName, currentParty, currentPartyId;
 btnAddModel.addEventListener('click', onAddParty);
 btnEditModel.addEventListener('click', onEditBtn);
 btnDeleteModel.addEventListener('click', () => deleteParty(currentPartyId));
-
 
 // Shows alert message
 function alertShowHide() {
@@ -114,9 +104,6 @@ const showTable = function (data) {
 function deleteBtn(id) {
     console.log(id);
     currentPartyId = id;
-    // if (confirm("Are sure to delete Party??")) {
-    //     deleteParty(id);
-    // }
 }
 
 function deleteParty(id) {

@@ -18,7 +18,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Party-Product</a>
@@ -89,7 +88,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                    <button type="button" id="btnAddModel" class="btn btn-primary">Add</button>
+                    <button type="button" id="btnAddModel" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
                 </div>
             </div>
         </div>
@@ -109,7 +108,31 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                    <button type="button" id="btnEditModel" class="btn btn-primary">Edit</button>
+                    <button type="button" id="btnEditModel" class="btn btn-primary"
+                        data-bs-dismiss="modal">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- delete product confirmation -->
+    <div class="modal fade" id="deleteProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="product-name" class="form-label">This will delete the record. Once deleted can not be
+                        rolled back.
+                        Do you want to proceed?</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" id="btnDeleteModel" class="btn btn-primary"
+                        data-bs-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>

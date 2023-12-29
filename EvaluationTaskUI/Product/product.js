@@ -10,11 +10,13 @@ const btnAddModel = document.querySelector('#btnAddModel');
 const btnEditModel = document.querySelector('#btnEditModel');
 const inputProduct = document.querySelector('#inputProduct');
 const inputProductEdit = document.querySelector('#inputProductEdit');
+const btnDeleteModel = document.querySelector('#btnDeleteModel');
 
-let currentProductName, currentProduct;
+let currentProductName, currentProduct, currentProductId;
 
 btnAddModel.addEventListener('click', onAddProduct);
 btnEditModel.addEventListener('click', onEditBtn);
+btnDeleteModel.addEventListener('click', () => deleteProduct(currentProductId));
 
 //adding Product
 function onAddProduct() {
@@ -67,17 +69,18 @@ const showTable = function (data) {
                 <td>${ele.name}</td>
                 <td><button type="button" id = "${ele.id}" onclick="getSetEditData(this.id)" data-bs-toggle="modal"
                 data-bs-target="#btnEditProduct"  class="btn btn-secondary">Edit</button></td>
-                <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger">Delete</button></td>
+                <td><button id = "${ele.id}" onclick="deleteBtn(this.id)" type="button" class="btn btn-danger" data-bs-toggle="modal"
+                data-bs-target="#deleteProduct">Delete</button></td>
             </tr>
         `
         allRows += oneRow;
     });
 
-    document.querySelectorAll(".btn-danger").forEach(ele => {
-        ele.addEventListener('click', function () {
-            deleteBtn(e)
-        })
-    });
+    // document.querySelectorAll(".btn-danger").forEach(ele => {
+    //     ele.addEventListener('click', function () {
+    //         deleteBtn(e)
+    //     })
+    // });
 
     tableBody.innerHTML = allRows;
 }
@@ -85,9 +88,10 @@ const showTable = function (data) {
 //delete
 function deleteBtn(id) {
     console.log(id);
-    if (confirm("Are your to delete Product??")) {
-        deleteProduct(id);
-    }
+    currentProductId = id;
+    // if (confirm("Are your to delete Product??")) {
+    //     deleteProduct(id);
+    // }
 }
 
 function deleteProduct(id) {

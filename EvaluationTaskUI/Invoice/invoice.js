@@ -139,6 +139,7 @@ async function openModel() {
     }).then(res => res.json());
     setDropdownProduct(dataProduct);
 }
+
 function setDropdownParty(data) {
     let allOptions = '<option selected value="">Select Party</option>';
 
