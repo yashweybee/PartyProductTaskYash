@@ -19,6 +19,10 @@ public partial class PartyProductWebApiContext : DbContext
 
     public virtual DbSet<Invoice> Invoices { get; set; }
 
+    public virtual DbSet<InvoiceDatum> InvoiceData { get; set; }
+
+    public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+
     public virtual DbSet<Party> Parties { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -67,6 +71,31 @@ public partial class PartyProductWebApiContext : DbContext
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Invoice__Product__4222D4EF");
+        });
+
+        modelBuilder.Entity<InvoiceDatum>(entity =>
+        {
+            entity.Property(e => e.Date).HasColumnType("date");
+
+            entity.HasOne(d => d.Party).WithMany(p => p.InvoiceData)
+                .HasForeignKey(d => d.PartyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InvoiceData_Party");
+        });
+
+        modelBuilder.Entity<InvoiceDetail>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.IdNavigation).WithOne(p => p.InvoiceDetail)
+                .HasForeignKey<InvoiceDetail>(d => d.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InvoiceDetails_InvoiceData");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.InvoiceDetails)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InvoiceDetails_Product");
         });
 
         modelBuilder.Entity<Party>(entity =>

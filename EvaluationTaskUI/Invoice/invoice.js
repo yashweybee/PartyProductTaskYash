@@ -4,6 +4,7 @@ const URL = 'https://localhost:7026/api/Invoice';
 const URL_Party = 'https://localhost:7026/api/Party';
 const URL_Product = 'https://localhost:7026/api/Product';
 const URL_ProductRate = 'https://localhost:7026/api/ProductRate';
+const URL_AssignParty = 'https://localhost:7026/api/AssignParty';
 
 const mainHeader = {
     "content-type": "application/json",
@@ -132,6 +133,7 @@ async function openModel() {
         headers: mainHeader
     }).then(res => res.json());
     setDropdownParty(dataParty);
+    console.log(dataParty);
 
     const dataProduct = await fetch(URL_Product, {
         method: 'GET',
@@ -153,7 +155,7 @@ function setDropdownParty(data) {
     });
 
     ddParty.innerHTML = allOptions;
-    ddPartyEdit.innerHTML = allOptions
+    ddPartyEdit.innerHTML = allOptions;
 }
 
 function setDropdownProduct(data) {

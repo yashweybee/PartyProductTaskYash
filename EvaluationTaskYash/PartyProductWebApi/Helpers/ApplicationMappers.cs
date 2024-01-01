@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EvaluationTaskYash.DTOs;
 using EvaluationTaskYash.Models;
 using PartyProductWebApi.DTOs;
 
@@ -23,6 +24,12 @@ namespace PartyProductWebApi.Helpers
 
             CreateMap<Invoice, InvoiceDTO>().ReverseMap();
             CreateMap<InvoiceCreationDTO, Invoice>();
+
+            CreateMap<InvoiceDatum, InvoiceDataDTO>().ReverseMap();
+            CreateMap<InvoiceDataCreationDTO, InvoiceDatum>();
+
+            //CreateMap<InvoiceDetail, InvoiceDetailDTO>().ReverseMap();
+            //CreateMap<InvoiceDetailCreationDTO, InvoiceDetail>();
         }
     }
 }

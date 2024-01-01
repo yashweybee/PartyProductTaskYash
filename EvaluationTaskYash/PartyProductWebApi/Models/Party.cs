@@ -11,5 +11,7 @@ public partial class Party
 
     public virtual ICollection<AssignParty> AssignParties { get; set; } = new List<AssignParty>();
 
+    public virtual ICollection<InvoiceDatum> InvoiceData { get; set; } = new List<InvoiceDatum>();
+
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }
