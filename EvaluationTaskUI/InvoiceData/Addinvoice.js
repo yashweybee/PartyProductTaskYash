@@ -139,9 +139,9 @@ $(document).ready(function () {
     fetch(URL_AssignParty, { headers: headers })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             const uniqueParties = new Set();
             data.forEach(party => {
+                console.log(party);
                 if (!uniqueParties.has(party.partyId)) {
                     uniqueParties.add(party.partyId);
                     $('#partyDropdown').append(`<option value="${party.partyId}">${party.partyName}</option>`);

@@ -11,48 +11,48 @@ const URL_Invoice = 'https://localhost:7026/api/InvoiceMaintain';
 
 $(document).ready(function () {
 
-    // $('#searchButton').click(function (e) {
-    //     e.preventDefault();
-    //     const partyId = $('#party').val();
-    //     const productId = $('input[type="checkbox"]:checked')
-    //         .map(function () {
-    //             return $(this).val();
-    //         })
-    //         .get()
-    //         .join(',');
-    //     const InvoiceNo = $('#invoiceNo').val();
-    //     const StartDate = $('#startDate').val();
-    //     const EndDate = $('#endDate').val();
+    $('#searchButton').click(function (e) {
+        e.preventDefault();
+        const partyId = $('#party').val();
+        const productId = $('input[type="checkbox"]:checked')
+            .map(function () {
+                return $(this).val();
+            })
+            .get()
+            .join(',');
+        const InvoiceNo = $('#invoiceNo').val();
+        const StartDate = $('#startDate').val();
+        const EndDate = $('#endDate').val();
 
-    //     const queryParams = new URLSearchParams({
-    //         partyId,
-    //         productId,
-    //         InvoiceNo,
-    //         StartDate,
-    //         EndDate
-    //     });
+        const queryParams = new URLSearchParams({
+            partyId,
+            productId,
+            InvoiceNo,
+            StartDate,
+            EndDate
+        });
 
-    //     console.log(partyId,
-    //         productId,
-    //         InvoiceNo,
-    //         StartDate,
-    //         EndDate);
+        console.log(partyId,
+            productId,
+            InvoiceNo,
+            StartDate,
+            EndDate);
 
-    //     const apiUrl = `https://localhost:44309/api/invoice/FilterInvoice?${queryParams}`;
+        const apiUrl = `https://localhost:44309/api/invoice/FilterInvoice?${queryParams}`;
 
-    //     $.ajax({
-    //         url: apiUrl,
-    //         headers: headers,
-    //         method: 'GET',
-    //         success: function (data) {
-    //             console.log(data);
-    //             $('#invoiceHistory').DataTable().clear().rows.add(data).draw();
-    //         },
-    //         error: function (error) {
-    //             console.error('Error fetching invoice history:', error);
-    //         }
-    //     });
-    // });
+        // $.ajax({
+        //     url: apiUrl,
+        //     headers: headers,
+        //     method: 'GET',
+        //     success: function (data) {
+        //         console.log(data);
+        //         $('#invoiceHistory').DataTable().clear().rows.add(data).draw();
+        //     },
+        //     error: function (error) {
+        //         console.error('Error fetching invoice history:', error);
+        //     }
+        // });
+    });
 
 
     fetch('https://localhost:7026/api/InvoiceMaintain', { headers: headers })
@@ -89,56 +89,57 @@ $(document).ready(function () {
     })
 
 
-    // $.ajax({
-    //     url: URL_Party,
-    //     method: 'GET',
-    //     headers: headers,
-    //     success: function (data) {
-    //         var partyDropdown = $('#party');
-    //         partyDropdown.empty();
-    //         partyDropdown.append('<option value="" selected>Select Party</option>');
+    $.ajax({
+        url: URL_Party,
+        method: 'GET',
+        headers: headers,
+        success: function (data) {
+            var partyDropdown = $('#party');
+            partyDropdown.empty();
+            partyDropdown.append('<option value="" selected>Select Party</option>');
 
-    //         data.forEach(function (party) {
-    //             partyDropdown.append(`<option value="${party.partyId}">${party.partyName}</option>`);
-    //         });
-    //     },
-    //     error: function (error) {
-    //         console.error('Error fetching party data:', error);
-    //     }
-    // });
+            data.forEach(party => {
+                partyDropdown.append(`<option value="${party.id}">${party.name}</option>`);
+            });
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
 
-    // $.ajax({
-    //     url: URL_Product,
-    //     method: 'GET',
-    //     headers: headers,
-    //     success: function (data) {
-    //         var productDropdown = $('#productOptions ul');
+    $.ajax({
+        url: URL_Product,
+        method: 'GET',
+        headers: headers,
+        success: function (data) {
+            var productDropdown = $('#productOptions ul');
 
-    //         productDropdown.empty();
+            productDropdown.empty();
 
-    //         data.forEach(function (product) {
-    //             productDropdown.append(`
-    //                 <li>
-    //                     <input type="checkbox" id="productCheck${product.productId}" value="${product.productId}">
-    //                     <label for="productCheck${product.productId}">${product.productName}</label>
-    //                 </li>
-    //             `);
-    //         });
+            data.forEach(function (product) {
+                console.log(product);
+                productDropdown.append(`
+                    <li>
+                        <input type="checkbox" id="productCheck${product.id}" value="${product.id}">
+                        <label for="productCheck${product.id}">${product.name}</label>
+                    </li>
+                `);
+            });
 
-    //         productDropdown.on('change', 'input[type="checkbox"]', function () {
-    //             var selectedProducts = $('input[type="checkbox"]:checked')
-    //                 .map(function () {
-    //                     return $(this).next('label').text();
-    //                 })
-    //                 .get()
-    //                 .join(', ');
+            productDropdown.on('change', 'input[type="checkbox"]', function () {
+                var selectedProducts = $('input[type="checkbox"]:checked')
+                    .map(function () {
+                        return $(this).next('label').text();
+                    })
+                    .get()
+                    .join(', ');
 
-    //             $('#productDropdown').text(selectedProducts || 'Select Products');
-    //         });
-    //     },
-    //     error: function (error) {
-    //         console.error('Error fetching product data:', error);
-    //     }
-    // });
+                $('#productDropdown').text(selectedProducts || 'Select Products');
+            });
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
 });
 

@@ -3,6 +3,7 @@ using EvaluationTaskYash.DTOs;
 using EvaluationTaskYash.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.DTOs;
 using System.Diagnostics.Metrics;
@@ -140,15 +141,6 @@ namespace EvaluationTaskYash.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-        //private int GetTotal(int id)
-        //{
-        //    var total = _context.InvoiceData
-        //  .Where(i => i.Id == id)
-        //  .Select(i => i.InvoiceItems.Sum(ii => ii.Quantity * ii.Rate))
-        //  .FirstOrDefault();
-
-        //    return total;
-        //}
 
         [HttpGet("InvoiceProducts/{Id}")]
         public async Task<ActionResult<List<ProductDTO>>> GetProductsForDropdown(int Id)
@@ -186,6 +178,48 @@ namespace EvaluationTaskYash.Controllers
                 .FirstAsync();
 
             return latestRate;
+        }
+
+        [HttpGet("FilterInvoice")]
+        public async Task<ActionResult> FilterInvoice(string partyId = null, string productId = null, string invoiceNo = null, DateTime? startDate = null, DateTime? endDate = null)
+        {
+            var partyIdParam = new SqlParameter("@partyId", (object)partyId ?? DBNull.Value);
+            var productIdParam = new SqlParameter("@productId", productId ?? (object)DBNull.Value);
+            var invoiceNoParam = new SqlParameter("@InvoiceNo", invoiceNo ?? (object)DBNull.Value);
+            var startDateParam = new SqlParameter("@StartDate", startDate ?? (object)DBNull.Value);
+            var endDateParam = new SqlParameter("@EndDate", endDate ?? (object)DBNull.Value);
+
+            var invoiceHistory = await _context.Invoices
+                .FromSqlRaw("EXEC FilterInvoice @PartyId, @ProductID, @InvoiceNo, @StartDate, @EndDate",
+                    partyIdParam, productIdParam, invoiceNoParam, startDateParam, endDateParam)
+                .ToListAsync();
+
+            var mappedInvoices = invoiceHistory.Select(i => new InvoiceDTO
+            {
+                Id = i.Id,
+                PartyId = i.PartyId,
+                Date = i.Date.ToString("dd-MM-yyyy hh:mm:ss tt"),
+                PartyName = GetPartyName(i.PartyId),
+                Total = (int)GetTotal(i.Id)
+            }).ToList();
+
+            return Ok(mappedInvoices);
+        }
+
+        private decimal GetTotal(int id)
+        {
+            var total = _context.InvoiceData
+         .Where(i => i.Id == id)
+         .Select(i => i.InvoiceDetails.Sum(ii => ii.Quantity * ii.Rate))
+         .FirstOrDefault();
+
+            return total;
+        }
+
+        private string GetPartyName(int partyId)
+        {
+            var party = _context.Parties.FirstOrDefault(p => p.Id == partyId);
+            return party?.Name ?? "Unknown";
         }
 
     }
