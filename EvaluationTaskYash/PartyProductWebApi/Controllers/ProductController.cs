@@ -10,7 +10,7 @@ namespace PartyProductWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         public PartyProductWebApiContext _context { get; }

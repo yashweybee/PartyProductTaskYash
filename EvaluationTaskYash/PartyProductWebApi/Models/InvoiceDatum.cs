@@ -11,9 +11,9 @@ public partial class InvoiceDatum
 
     public DateTime Date { get; set; }
 
-    public int Total { get; set; }
+    public int? Total { get; set; }
 
-    public virtual InvoiceDetail? InvoiceDetail { get; set; }
+    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
     public virtual Party Party { get; set; } = null!;
 }

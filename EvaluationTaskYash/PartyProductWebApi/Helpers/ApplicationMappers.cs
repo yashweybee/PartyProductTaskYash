@@ -22,11 +22,14 @@ namespace PartyProductWebApi.Helpers
             CreateMap<AssignParty, AssignPartyDTO>().ReverseMap();
             CreateMap<AssignPartyCreationDTO, AssignParty>();
 
-            CreateMap<Invoice, InvoiceDTO>().ReverseMap();
-            CreateMap<InvoiceCreationDTO, Invoice>();
+            CreateMap<Invoice, InvoiceDTO>();
+            CreateMap<Invoice, InvoiceDetailsDTO>();
 
-            CreateMap<InvoiceDatum, InvoiceDataDTO>().ReverseMap();
-            CreateMap<InvoiceDataCreationDTO, InvoiceDatum>();
+            //CreateMap<Invoice, InvoiceDTO>().ReverseMap();
+            //CreateMap<InvoiceCreationDTO, Invoice>();
+
+            //CreateMap<InvoiceDatum, InvoiceDataDTO>().ReverseMap();
+            //CreateMap<InvoiceDataCreationDTO, InvoiceDatum>();
 
             //CreateMap<InvoiceDetail, InvoiceDetailDTO>().ReverseMap();
             //CreateMap<InvoiceDetailCreationDTO, InvoiceDetail>();

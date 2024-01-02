@@ -15,7 +15,7 @@ public partial class InvoiceDetail
 
     public int Quantity { get; set; }
 
-    public virtual InvoiceDatum IdNavigation { get; set; } = null!;
+    public virtual InvoiceDatum Invoice { get; set; } = null!;
 
     public virtual Product Product { get; set; } = null!;
 }

@@ -10,55 +10,35 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-
-    <style>
-        body {
-            padding-top: 56px;
-        }
-
-        .table-container {
-            margin-top: 20px;
-        }
-
-        select[name="invoiceTable_length"] {
-            width: 70px !important;
-        }
-    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Product Management</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">Party-Product</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-md-auto gap-2">
-                    <li class="nav-item rounded">
-                        <a class="nav-link " aria-current="page" href="index.html"><i
-                                class="bi bi-house-fill me-2"></i>Party</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="../index.html">Party</a>
                     </li>
-                    <li class="nav-item rounded">
-                        <a class="nav-link " aria-current="page" href="product.html"><i
-                                class="bi bi-house-fill me-2"></i>Product</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Product/Product.html">Product</a>
                     </li>
-                    <li class="nav-item rounded">
-                        <a class="nav-link " aria-current="page" href="assignParty.html"><i
-                                class="bi bi-house-fill me-2"></i>Assign Party</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AssignParty/AssignParty.html">Assign Party</a>
                     </li>
-                    <li class="nav-item rounded">
-                        <a class="nav-link " aria-current="page" href="productRate.html"><i
-                                class="bi bi-house-fill me-2"></i>Product Rate</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../ProductRate/productRate.html">Product Rate</a>
                     </li>
-                    <li class="nav-item rounded">
-                        <a class="nav-link active" aria-current="page" href="invoice.html"><i
-                                class="bi bi-house-fill me-2"></i>Invoice</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Invoice/invoice.html">Invoice</a>
                     </li>
-                    <li class="nav-item rounded">
-                        <button id="logout" class="btn btn-outline-danger" type="submit">logout</button>
-                    </li>
+                    <button id="btnLogout" class="btn btn-link" type="submit">Logout</button>
                 </ul>
             </div>
         </div>
@@ -107,8 +87,8 @@
                     </table>
                     <div>Grand Total: <span id="grandTotal">0.00</span> </div>
                 </div>
-                <button id="GenerateInvoice" class="btn btn-success mt-4">Generate Invoice</button>
-                <button id="invoiceCancle" class="btn btn-danger mt-4">Cancle</button>
+                <button id="GenerateInvoice" class="btn btn-primary mt-4">Generate Invoice</button>
+                <button id="invoiceCancle" class="btn btn-danger mt-4">Cancel</button>
 
 
             </div>
@@ -123,8 +103,8 @@
 
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/auth.js"></script>
-    <!-- <script src="js/addInvoice.js"></script> -->
+    <script src="../Authentication/Auth.js"></script>
+    <script src="./Addinvoice.js"></script>
 
     <script>
 
