@@ -119,7 +119,7 @@ namespace EvaluationTaskYash.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(lastEnteredInvoiceData.Id);
         }
 
 
@@ -127,7 +127,7 @@ namespace EvaluationTaskYash.Controllers
         [HttpDelete("{Id}")]
         public async Task<ActionResult> Delete(int Id)
         {
-            var invoice = await _context.Invoices.FindAsync(Id);
+            var invoice = await _context.InvoiceData.FindAsync(Id);
 
             if (invoice == null)
             {
@@ -136,7 +136,7 @@ namespace EvaluationTaskYash.Controllers
 
             var invoiceItems = _context.InvoiceDetails.Where(item => item.InvoiceId == Id);
             _context.InvoiceDetails.RemoveRange(invoiceItems);
-            _context.Invoices.Remove(invoice);
+            _context.InvoiceData.Remove(invoice);
             await _context.SaveChangesAsync();
             return NoContent();
         }

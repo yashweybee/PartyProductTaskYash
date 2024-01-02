@@ -13,17 +13,18 @@ const URL_Invoice = 'https://localhost:7026/api/InvoiceMaintain';
 
 
 $(document).ready(function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const invoiceId = urlParams.get('id');
+    const urlParameters = new URLSearchParams(window.location.search);
+    const invoiceId = urlParameters.get('id');
+    console.log(invoiceId);
 
-
-    fetch(`${URL_Invoice}/${invoiceId}`,
+    fetch(URL_Invoice + `/${invoiceId}`,
         {
             method: 'GET',
             headers: headers
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             editData = data;
             $('#invoiceId').text(data.id);
             $('#partyId').text(data.partyId);
@@ -69,9 +70,8 @@ $(document).ready(function () {
                     }
                 ]
             });
-
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Error:', error);
         });
 
@@ -99,9 +99,10 @@ $(document).ready(function () {
         var row = table.row(tr);
         var rowData = row.data();
         var productId = rowData.productId;
+        console.log(products);
         var dropdownOptions = products.map(function (product) {
-            var selected = (product.productId === productId) ? 'selected' : '';
-            return '<option value="' + product.productId + '" ' + selected + '>' + product.productName + '</option>';
+            var selected = (product.id === productId) ? 'selected' : '';
+            return '<option value="' + product.id + '" ' + selected + '>' + product.name + '</option>';
         }).join('');
 
         tr.find('td').each(function (i) {
@@ -122,7 +123,7 @@ $(document).ready(function () {
             var selectedProductId = $(this).val();
             console.log('Selected Product ID:', selectedProductId);
 
-            var selectedProduct = products.find(product => product.productId.toString() === selectedProductId.toString());
+            var selectedProduct = products.find(product => product.id.toString() === selectedProductId.toString());
             console.log('Selected Product:', selectedProduct);
 
             $.ajax({
@@ -210,7 +211,7 @@ $(document).ready(function () {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
-            success: function () {
+            success: function (data) {
                 $.ajax({
                     url: 'https://localhost:7026/api/InvoiceMaintain',
                     type: 'POST',
@@ -218,11 +219,9 @@ $(document).ready(function () {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     },
                     contentType: 'application/json',
-
                     data: JSON.stringify(newData),
                     success: function (data) {
-                        console.log(data);
-                        window.location.href = `viewInvoice.html?id=${data}`;
+                        window.location.href = `./viewInvoice.html?id=${data}`;
                     },
                     error: function (error) {
                         console.log(error);
