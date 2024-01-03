@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PartyProductWebApi.DTOs;
+using System.Data;
 using System.Diagnostics.Metrics;
 
 namespace EvaluationTaskYash.Controllers
@@ -135,8 +136,8 @@ namespace EvaluationTaskYash.Controllers
                 return NotFound();
             }
 
-            var invoiceItems = _context.InvoiceDetails.Where(item => item.InvoiceId == Id);
-            _context.InvoiceDetails.RemoveRange(invoiceItems);
+            var invoiceDetail = _context.InvoiceDetails.Where(item => item.InvoiceId == Id);
+            _context.InvoiceDetails.RemoveRange(invoiceDetail);
             _context.InvoiceData.Remove(invoice);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -180,19 +181,28 @@ namespace EvaluationTaskYash.Controllers
             return latestRate;
         }
 
-        [HttpGet("FilterInvoice")]
-        public async Task<ActionResult> FilterInvoice(string partyId = null, string productId = null, string invoiceNo = null, DateTime? startDate = null, DateTime? endDate = null)
+        [HttpPost("Filter")]
+        public async Task<ActionResult> FilterInvoice([FromBody] InvoiceFilterDTO invoiceFilterDTO)
         {
-            var partyIdParam = new SqlParameter("@partyId", (object)partyId ?? DBNull.Value);
-            var productIdParam = new SqlParameter("@productId", productId ?? (object)DBNull.Value);
-            var invoiceNoParam = new SqlParameter("@InvoiceNo", invoiceNo ?? (object)DBNull.Value);
-            var startDateParam = new SqlParameter("@StartDate", startDate ?? (object)DBNull.Value);
-            var endDateParam = new SqlParameter("@EndDate", endDate ?? (object)DBNull.Value);
+            var partyIdParam = new SqlParameter("@partyId", invoiceFilterDTO.PartyId ?? (object)DBNull.Value);
+            var productIdParam = new SqlParameter("@productId", invoiceFilterDTO.ProductId ?? (object)DBNull.Value);
+            var invoiceNoParam = new SqlParameter("@InvoiceNo", invoiceFilterDTO.InvoiceNo ?? (object)DBNull.Value);
+            var startDateParam = new SqlParameter("@StartDate", invoiceFilterDTO.StartDate ?? (object)DBNull.Value);
+            var endDateParam = new SqlParameter("@EndDate", invoiceFilterDTO.EndDate ?? (object)DBNull.Value);
+            var orderDirectionParam = new SqlParameter("@OrderDirection", invoiceFilterDTO.Order ?? (object)DBNull.Value);
+            var pageNoParam = new SqlParameter("@PageNo", invoiceFilterDTO.PageNo);
+            var pageSizeParam = new SqlParameter("@PageSize", invoiceFilterDTO.PageSize);
+            var sortColumnParam = new SqlParameter("@SortColumn", invoiceFilterDTO.Column ?? (object)DBNull.Value);
 
-            var invoiceHistory = await _context.Invoices
-                .FromSqlRaw("EXEC FilterInvoice @PartyId, @ProductID, @InvoiceNo, @StartDate, @EndDate",
-                    partyIdParam, productIdParam, invoiceNoParam, startDateParam, endDateParam)
+            var totalCountParam = new SqlParameter("@TotalCount", SqlDbType.Int);
+            totalCountParam.Direction = ParameterDirection.Output;
+
+            var invoiceHistory = await _context.InvoiceData
+                .FromSqlRaw("EXEC InvoiceFilter @PartyId, @ProductID, @InvoiceNo, @StartDate, @EndDate, @OrderDirection, @PageNo, @PageSize, @SortColumn, @TotalCount OUTPUT",
+                    partyIdParam, productIdParam, invoiceNoParam, startDateParam, endDateParam, orderDirectionParam, pageNoParam, pageSizeParam, sortColumnParam, totalCountParam)
                 .ToListAsync();
+
+            var totalCount = (int)totalCountParam.Value;
 
             var mappedInvoices = invoiceHistory.Select(i => new InvoiceDTO
             {
@@ -203,8 +213,11 @@ namespace EvaluationTaskYash.Controllers
                 Total = (int)GetTotal(i.Id)
             }).ToList();
 
-            return Ok(mappedInvoices);
+            return Ok(new { Invoices = mappedInvoices, TotalCount = totalCount });
         }
+
+
+
 
         private decimal GetTotal(int id)
         {

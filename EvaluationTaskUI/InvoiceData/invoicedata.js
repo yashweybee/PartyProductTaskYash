@@ -7,53 +7,54 @@ const headers = {
 const URL_Party = 'https://localhost:7026/api/Party';
 const URL_Product = 'https://localhost:7026/api/Product';
 const URL_Invoice = 'https://localhost:7026/api/InvoiceMaintain';
+const URL_Filter_Invoie = 'https://localhost:7026/api/InvoiceMaintain/Filter';
 
 
 $(document).ready(function () {
 
     $('#searchButton').click(function (e) {
         e.preventDefault();
-        const partyId = $('#party').val();
+        const partyId = $('#party').val() ? $('#party').val() : null;
         const productId = $('input[type="checkbox"]:checked')
             .map(function () {
                 return $(this).val();
             })
             .get()
             .join(',');
-        const InvoiceNo = $('#invoiceNo').val();
-        const StartDate = $('#startDate').val();
-        const EndDate = $('#endDate').val();
+        const InvoiceNo = $('#invoiceNo').val() ? $('#invoiceNo').val() : null;
+        const StartDate = $('#startDate').val() ? $('#startDate').val() : null;
+        const EndDate = $('#endDate').val() ? $('#endDate').val() : null;
 
-        const queryParams = new URLSearchParams({
+
+        const searchData = {
+            order: 'asc',
+            pageNo: $('#invoiceHistory').DataTable().page() + 1,
+            pageSize: $('#invoiceHistory').DataTable().page.len(),
             partyId,
-            productId,
             InvoiceNo,
+            productId: productId ? productId : null,
             StartDate,
-            EndDate
+            EndDate,
+            column: "PartyName"
+        }
+
+        console.log(searchData);
+
+
+        $.ajax({
+            url: URL_Filter_Invoie,
+            headers: headers,
+            method: 'POST',
+            data: JSON.stringify(searchData),
+            success: function (data) {
+                console.log(data);
+                $('#invoiceHistory').DataTable().clear().rows.add(data.invoices).draw();
+            },
+            error: function (error) {
+                console.error(error);
+            }
         });
-
-        console.log(partyId,
-            productId,
-            InvoiceNo,
-            StartDate,
-            EndDate);
-
-        const apiUrl = `https://localhost:44309/api/invoice/FilterInvoice?${queryParams}`;
-
-        // $.ajax({
-        //     url: apiUrl,
-        //     headers: headers,
-        //     method: 'GET',
-        //     success: function (data) {
-        //         console.log(data);
-        //         $('#invoiceHistory').DataTable().clear().rows.add(data).draw();
-        //     },
-        //     error: function (error) {
-        //         console.error('Error fetching invoice history:', error);
-        //     }
-        // });
     });
-
 
     fetch('https://localhost:7026/api/InvoiceMaintain', { headers: headers })
         .then(response => response.json())
@@ -62,10 +63,10 @@ $(document).ready(function () {
             $('#invoiceHistory').DataTable({
                 data: data,
                 columns: [
-                    { data: 'id', title: 'id' },
-                    { data: 'partyId', title: 'partyId' },
-                    { data: 'partyName', title: 'partyName' },
-                    { data: 'date', title: 'date' },
+                    { data: 'id', title: 'Id' },
+                    { data: 'partyId', title: 'Party Id' },
+                    { data: 'partyName', title: 'Party Name' },
+                    { data: 'date', title: 'Date' },
                     {
                         title: 'Actions',
                         render: function (data, type, row) {
