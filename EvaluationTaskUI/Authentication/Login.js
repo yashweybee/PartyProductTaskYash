@@ -52,6 +52,6 @@ async function postingData(objBody) {
         console.log(localStorage.getItem("token"));
         window.location.replace("../index.html");
     } else {
-        alert("Error");
+        alertAnimation();
     }
 }

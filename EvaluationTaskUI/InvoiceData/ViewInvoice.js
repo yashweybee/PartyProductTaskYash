@@ -359,3 +359,11 @@ function updateDataTable() {
 
     $('#grandTotal').text(grandTotal.toFixed(2));
 }
+
+window.onload = function () {
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
+};

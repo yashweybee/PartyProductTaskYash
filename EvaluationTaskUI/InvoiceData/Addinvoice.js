@@ -195,5 +195,13 @@ $(document).ready(function () {
                 loadInvoiceProductRate();
             });
     }
-
 });
+
+
+window.onload = function () {
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
+};

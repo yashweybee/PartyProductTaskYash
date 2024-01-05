@@ -89,6 +89,10 @@ $(document).ready(function () {
         location.reload();
     })
 
+    $('#invoiceHistory').on('click', 'thead th', function () {
+        console.log("header");
+    })
+
 
     $.ajax({
         url: URL_Party,
@@ -144,3 +148,10 @@ $(document).ready(function () {
     });
 });
 
+window.onload = function () {
+    if (localStorage.getItem("token") === null) {
+        window.location.replace("../Authentication/Login.html");
+    } else {
+        getData();
+    }
+};

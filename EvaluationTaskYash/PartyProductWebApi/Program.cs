@@ -1,4 +1,6 @@
 using AutoMapper;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using EvaluationTaskYash.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -23,13 +25,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PartyProductWebApiContext>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddCors();
 //builder.Services.AddMvc();
+
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 
 var app = builder.Build();
 
